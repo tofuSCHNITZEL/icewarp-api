@@ -5,7 +5,7 @@ Typed wrappers for endpoints tagged 'License related methods' in the IceWarp Mai
 
 from __future__ import annotations
 
-from typing import Any, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from ..client import IceWarpClient
@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 class LicenseMethods:
     """Typed wrappers for endpoints tagged 'License related methods'."""
 
-    def __init__(self, client: "IceWarpClient") -> None:
+    def __init__(self, client: IceWarpClient) -> None:
         self._client = client
 
     def get_license_info(self) -> Any:

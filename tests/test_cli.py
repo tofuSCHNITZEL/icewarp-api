@@ -79,7 +79,7 @@ def test_status_with_no_cached_session(monkeypatch, tmp_path):
 def test_status_shows_cached_session(monkeypatch, tmp_path):
     isolate_session_cache(monkeypatch, tmp_path)
     (tmp_path / "session.json").write_text(
-        '{"base_url": "%s", "email": "admin@example.com", "sid": "sid-123"}' % BASE_URL
+        f'{{"base_url": "{BASE_URL}", "email": "admin@example.com", "sid": "sid-123"}}'
     )
     result = runner.invoke(cli.app, ["status"])
     assert result.exit_code == 0, result.stdout
@@ -124,7 +124,7 @@ def test_login_and_cached_session_reuse(requests_mock, monkeypatch, tmp_path):
 
 def test_cached_url_is_used_without_passing_url_flag(requests_mock, monkeypatch, tmp_path):
     isolate_session_cache(monkeypatch, tmp_path)
-    (tmp_path / "session.json").write_text('{"base_url": "%s", "email": "a@b.com", "sid": "sid-123"}' % BASE_URL)
+    (tmp_path / "session.json").write_text(f'{{"base_url": "{BASE_URL}", "email": "a@b.com", "sid": "sid-123"}}')
     requests_mock.post(
         f"{BASE_URL}/GetSessionInfo", text=xml_result("<result><email>a@b.com</email></result>")
     )
@@ -149,7 +149,7 @@ def test_call_generic_passthrough(requests_mock, monkeypatch, tmp_path):
         f"{BASE_URL}/GetDomainsInfoList",
         text=xml_result("<result><item><name>example.com</name></item></result>"),
     )
-    (tmp_path / "session.json").write_text('{"base_url": "%s", "email": "a@b.com", "sid": "sid-123"}' % BASE_URL)
+    (tmp_path / "session.json").write_text(f'{{"base_url": "{BASE_URL}", "email": "a@b.com", "sid": "sid-123"}}')
     requests_mock.post(
         f"{BASE_URL}/GetSessionInfo", text=xml_result("<result><email>a@b.com</email></result>")
     )
@@ -161,7 +161,7 @@ def test_call_generic_passthrough(requests_mock, monkeypatch, tmp_path):
 
 def test_get_all_accounts_command(requests_mock, monkeypatch, tmp_path):
     isolate_session_cache(monkeypatch, tmp_path)
-    (tmp_path / "session.json").write_text('{"base_url": "%s", "email": "a@b.com", "sid": "sid-123"}' % BASE_URL)
+    (tmp_path / "session.json").write_text(f'{{"base_url": "{BASE_URL}", "email": "a@b.com", "sid": "sid-123"}}')
     requests_mock.post(
         f"{BASE_URL}/GetSessionInfo", text=xml_result("<result><email>a@b.com</email></result>")
     )
@@ -182,7 +182,7 @@ def test_get_all_accounts_command(requests_mock, monkeypatch, tmp_path):
 
 def test_get_all_accounts_command_with_domain_filter(requests_mock, monkeypatch, tmp_path):
     isolate_session_cache(monkeypatch, tmp_path)
-    (tmp_path / "session.json").write_text('{"base_url": "%s", "email": "a@b.com", "sid": "sid-123"}' % BASE_URL)
+    (tmp_path / "session.json").write_text(f'{{"base_url": "{BASE_URL}", "email": "a@b.com", "sid": "sid-123"}}')
     requests_mock.post(
         f"{BASE_URL}/GetSessionInfo", text=xml_result("<result><email>a@b.com</email></result>")
     )

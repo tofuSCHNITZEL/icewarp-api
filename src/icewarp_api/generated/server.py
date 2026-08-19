@@ -5,7 +5,7 @@ Typed wrappers for endpoints tagged 'Server related methods' in the IceWarp Main
 
 from __future__ import annotations
 
-from typing import Any, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from ..client import IceWarpClient
@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 class ServerMethods:
     """Typed wrappers for endpoints tagged 'Server related methods'."""
 
-    def __init__(self, client: "IceWarpClient") -> None:
+    def __init__(self, client: IceWarpClient) -> None:
         self._client = client
 
     def get_all_api_variables(self) -> Any:
@@ -37,7 +37,7 @@ class ServerMethods:
         """
         return self._client.call("GetAllAPIVariables")
 
-    def get_my_server_rights(self, *, serverpropertylist: Optional[Any] = None) -> Any:
+    def get_my_server_rights(self, *, serverpropertylist: Any | None = None) -> Any:
         """Gets the rights for server properties
 
         Gets the rights for server properties
@@ -64,7 +64,7 @@ class ServerMethods:
         }
         return self._client.call("GetMyServerRights", **params)
 
-    def get_server_api_console(self, *, filter: Optional[Any] = None, offset: Optional[int] = None, count: Optional[int] = None, comments: Optional[str] = None) -> Any:
+    def get_server_api_console(self, *, filter: Any | None = None, offset: int | None = None, count: int | None = None, comments: str | None = None) -> Any:
         """Gets the list of server api variables, its values, data types and rights
 
         Gets the list of server api variables, its values, data types and rights
@@ -100,7 +100,7 @@ class ServerMethods:
         }
         return self._client.call("GetServerAPIConsole", **params)
 
-    def get_server_properties(self, *, serverpropertylist: Optional[Any] = None) -> Any:
+    def get_server_properties(self, *, serverpropertylist: Any | None = None) -> Any:
         """Gets the values of server properties
 
         Gets the values of server properties
@@ -127,7 +127,7 @@ class ServerMethods:
         }
         return self._client.call("GetServerProperties", **params)
 
-    def set_server_properties(self, *, propertyvaluelist: Optional[Any] = None) -> Any:
+    def set_server_properties(self, *, propertyvaluelist: Any | None = None) -> Any:
         """Sets the values of server properties
 
         Sets the values of server properties

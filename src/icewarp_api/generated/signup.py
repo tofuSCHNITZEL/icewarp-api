@@ -5,7 +5,7 @@ Typed wrappers for endpoints tagged 'SignUp related methods' in the IceWarp Main
 
 from __future__ import annotations
 
-from typing import Any, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from ..client import IceWarpClient
@@ -14,10 +14,10 @@ if TYPE_CHECKING:
 class SignupMethods:
     """Typed wrappers for endpoints tagged 'SignUp related methods'."""
 
-    def __init__(self, client: "IceWarpClient") -> None:
+    def __init__(self, client: IceWarpClient) -> None:
         self._client = client
 
-    def change_password(self, *, email: Optional[str] = None, oldpassword: Optional[str] = None, newpassword: Optional[str] = None, authtype: Optional[str] = None) -> Any:
+    def change_password(self, *, email: str | None = None, oldpassword: str | None = None, newpassword: str | None = None, authtype: str | None = None) -> Any:
         """Changes the password for account specified by email
 
         Changes the password for account specified by email
@@ -49,7 +49,7 @@ class SignupMethods:
         }
         return self._client.call("ChangePassword", **params)
 
-    def confirm_personality(self, *, email: Optional[str] = None, user: Optional[str] = None, hash: Optional[str] = None) -> Any:
+    def confirm_personality(self, *, email: str | None = None, user: str | None = None, hash: str | None = None) -> Any:
         """Confirmation of personality added using WebClient
 
         Confirmation of personality added using WebClient
@@ -79,7 +79,7 @@ class SignupMethods:
         }
         return self._client.call("ConfirmPersonality", **params)
 
-    def contact_administrator(self, *, email: Optional[str] = None, data: Optional[str] = None, host: Optional[str] = None, captcharequest: Optional[Any] = None) -> Any:
+    def contact_administrator(self, *, email: str | None = None, data: str | None = None, host: str | None = None, captcharequest: Any | None = None) -> Any:
         """Sends the email to contact the server administrator
 
         Sends the email to contact the server administrator
@@ -131,7 +131,7 @@ class SignupMethods:
         """
         return self._client.call("GetCaptcha")
 
-    def get_jitsi_jwt(self, *, meetingid: Optional[str] = None, username: Optional[str] = None, password: Optional[str] = None, avatar: Optional[str] = None, forceemail: Optional[str] = None) -> Any:
+    def get_jitsi_jwt(self, *, meetingid: str | None = None, username: str | None = None, password: str | None = None, avatar: str | None = None, forceemail: str | None = None) -> Any:
         """Returns JWT Jitsi messaging token
 
         Returns JWT Jitsi messaging token
@@ -209,7 +209,7 @@ class SignupMethods:
         """
         return self._client.call("GetLicenseManagementSecret")
 
-    def get_total_saas_usage(self, *, domainstr: Optional[str] = None) -> Any:
+    def get_total_saas_usage(self, *, domainstr: str | None = None) -> Any:
         """Returns usage list of plans per domain or combined of all domains on server
 
         Returns usage list of plans per domain or combined of all domains on server
@@ -235,7 +235,7 @@ class SignupMethods:
         }
         return self._client.call("GetTotalSaaSUsage", **params)
 
-    def get_user_stats(self, *, datefrom: Optional[str] = None, dateto: Optional[str] = None, filter: Optional[str] = None, maxitems: Optional[str] = None, groupbydomain: Optional[str] = None) -> Any:
+    def get_user_stats(self, *, datefrom: str | None = None, dateto: str | None = None, filter: str | None = None, maxitems: str | None = None, groupbydomain: str | None = None) -> Any:
         """Creates params for user statistics in CSV format export as URL
 
         Creates params for user statistics in CSV format export as URL
@@ -274,7 +274,7 @@ class SignupMethods:
         }
         return self._client.call("GetUserStats", **params)
 
-    def guest_confirm(self, *, email: Optional[str] = None, password: Optional[str] = None, fullname: Optional[str] = None, sender: Optional[str] = None, hash: Optional[str] = None, authtype: Optional[str] = None) -> Any:
+    def guest_confirm(self, *, email: str | None = None, password: str | None = None, fullname: str | None = None, sender: str | None = None, hash: str | None = None, authtype: str | None = None) -> Any:
         """Sends the guest confirmation email that contains the link to verify guest account
  It also sets fullname and password for guest account
 
@@ -312,7 +312,7 @@ class SignupMethods:
         }
         return self._client.call("GuestConfirm", **params)
 
-    def guest_verify(self, *, email: Optional[str] = None, hash: Optional[str] = None) -> Any:
+    def guest_verify(self, *, email: str | None = None, hash: str | None = None) -> Any:
         """Verifies the guest account
 
         Verifies the guest account
@@ -340,7 +340,7 @@ class SignupMethods:
         }
         return self._client.call("GuestVerify", **params)
 
-    def gw_add_meeting_info(self, *, meetingtype: Optional[str] = None, meetingid: Optional[str] = None, organizer: Optional[str] = None, summary: Optional[str] = None, password: Optional[str] = None, folder: Optional[str] = None, autorecording: Optional[str] = None, autolobby: Optional[str] = None, lobbybackground: Optional[str] = None, followup: Optional[str] = None, language: Optional[str] = None) -> Any:
+    def gw_add_meeting_info(self, *, meetingtype: str | None = None, meetingid: str | None = None, organizer: str | None = None, summary: str | None = None, password: str | None = None, folder: str | None = None, autorecording: str | None = None, autolobby: str | None = None, lobbybackground: str | None = None, followup: str | None = None, language: str | None = None) -> Any:
         """Pipe to GW AddMeetingInfo
 
         Pipe to GW AddMeetingInfo
@@ -386,7 +386,7 @@ class SignupMethods:
         }
         return self._client.call("GWAddMeetingInfo", **params)
 
-    def gw_get_meeting_info(self, *, meetingid: Optional[str] = None, showpassword: Optional[str] = None) -> Any:
+    def gw_get_meeting_info(self, *, meetingid: str | None = None, showpassword: str | None = None) -> Any:
         """Pipe to GW GetMeetingInfo
 
         Pipe to GW GetMeetingInfo
@@ -414,7 +414,7 @@ class SignupMethods:
         }
         return self._client.call("GWGetMeetingInfo", **params)
 
-    def manage_cloud_license(self, *, licenserequest: Optional[str] = None) -> Any:
+    def manage_cloud_license(self, *, licenserequest: str | None = None) -> Any:
         """Returns license informations
 
         Returns license informations
@@ -440,7 +440,7 @@ class SignupMethods:
         }
         return self._client.call("ManageCloudLicense", **params)
 
-    def meeting_remote_joined(self, *, meetingid: Optional[str] = None, email: Optional[str] = None, meetingurl: Optional[str] = None, organizer: Optional[str] = None, summary: Optional[str] = None, recordingsuri: Optional[str] = None, recordingsapiuri: Optional[str] = None) -> Any:
+    def meeting_remote_joined(self, *, meetingid: str | None = None, email: str | None = None, meetingurl: str | None = None, organizer: str | None = None, summary: str | None = None, recordingsuri: str | None = None, recordingsapiuri: str | None = None) -> Any:
         """Creates corresponding info when user is joined to existing meeting on remote server
 
         Creates corresponding info when user is joined to existing meeting on remote server
@@ -485,7 +485,7 @@ class SignupMethods:
         }
         return self._client.call("MeetingRemoteJoined", **params)
 
-    def reset_password(self, *, email: Optional[str] = None, newpassword: Optional[str] = None, resethash: Optional[str] = None, authtype: Optional[str] = None) -> Any:
+    def reset_password(self, *, email: str | None = None, newpassword: str | None = None, resethash: str | None = None, authtype: str | None = None) -> Any:
         """Resets the password for account specified by email
 
         Resets the password for account specified by email
@@ -517,7 +517,7 @@ class SignupMethods:
         }
         return self._client.call("ResetPassword", **params)
 
-    def reset_password_email(self, *, email: Optional[str] = None, langid: Optional[str] = None, captcharequest: Optional[Any] = None) -> Any:
+    def reset_password_email(self, *, email: str | None = None, langid: str | None = None, captcharequest: Any | None = None) -> Any:
         """Sends the reset password email that contains the link to reset the password, captcha protected
 
         Sends the reset password email that contains the link to reset the password, captcha protected
@@ -547,7 +547,7 @@ class SignupMethods:
         }
         return self._client.call("ResetPasswordEmail", **params)
 
-    def send_signup_verification(self, *, verificationtype: Optional[str] = None, verificationselector: Optional[str] = None, captcharequest: Optional[Any] = None) -> Any:
+    def send_signup_verification(self, *, verificationtype: str | None = None, verificationselector: str | None = None, captcharequest: Any | None = None) -> Any:
         """Sends a signup verification
 
         Sends a signup verification
@@ -577,7 +577,7 @@ class SignupMethods:
         }
         return self._client.call("SendSignupVerification", **params)
 
-    def signup_account(self, *, domain: Optional[str] = None, username: Optional[str] = None, password: Optional[str] = None, fullname: Optional[str] = None, alternativeemail: Optional[str] = None, authtype: Optional[str] = None, card: Optional[Any] = None, captcharequest: Optional[Any] = None, verificationrequest: Optional[Any] = None, session: Optional[str] = None) -> Any:
+    def signup_account(self, *, domain: str | None = None, username: str | None = None, password: str | None = None, fullname: str | None = None, alternativeemail: str | None = None, authtype: str | None = None, card: Any | None = None, captcharequest: Any | None = None, verificationrequest: Any | None = None, session: str | None = None) -> Any:
         """Creates a new account on IceWarp server , Captcha protected
 
         Creates a new account on IceWarp server , Captcha protected
@@ -621,7 +621,7 @@ class SignupMethods:
         }
         return self._client.call("SignupAccount", **params)
 
-    def username_available(self, *, domain: Optional[str] = None, username: Optional[str] = None, session: Optional[str] = None) -> Any:
+    def username_available(self, *, domain: str | None = None, username: str | None = None, session: str | None = None) -> Any:
         """Check if username is available in given domain
  - Domain has to be same as in invite session
  - Returns true if username is available in given domain

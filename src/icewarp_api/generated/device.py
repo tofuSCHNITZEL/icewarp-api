@@ -5,7 +5,7 @@ Typed wrappers for endpoints tagged 'Device related methods' in the IceWarp Main
 
 from __future__ import annotations
 
-from typing import Any, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from ..client import IceWarpClient
@@ -14,10 +14,10 @@ if TYPE_CHECKING:
 class DeviceMethods:
     """Typed wrappers for endpoints tagged 'Device related methods'."""
 
-    def __init__(self, client: "IceWarpClient") -> None:
+    def __init__(self, client: IceWarpClient) -> None:
         self._client = client
 
-    def delete_all_devices(self, *, who: Optional[str] = None, filter: Optional[Any] = None) -> Any:
+    def delete_all_devices(self, *, who: str | None = None, filter: Any | None = None) -> Any:
         """Deletes the mobile devices that matches current Who and Filter
 
         Deletes the mobile devices that matches current Who and Filter
@@ -47,7 +47,7 @@ class DeviceMethods:
         }
         return self._client.call("DeleteAllDevices", **params)
 
-    def delete_devices(self, *, deviceslist: Optional[Any] = None) -> Any:
+    def delete_devices(self, *, deviceslist: Any | None = None) -> Any:
         """Deletes mobile device(s)
 
         Deletes mobile device(s)
@@ -74,7 +74,7 @@ class DeviceMethods:
         }
         return self._client.call("DeleteDevices", **params)
 
-    def get_device_properties(self, *, deviceid: Optional[str] = None, devicepropertylist: Optional[Any] = None) -> Any:
+    def get_device_properties(self, *, deviceid: str | None = None, devicepropertylist: Any | None = None) -> Any:
         """Gets mobile device properties
 
         Gets mobile device properties
@@ -104,7 +104,7 @@ class DeviceMethods:
         }
         return self._client.call("GetDeviceProperties", **params)
 
-    def get_devices_info_list(self, *, who: Optional[str] = None, filter: Optional[Any] = None, offset: Optional[int] = None, count: Optional[int] = None) -> Any:
+    def get_devices_info_list(self, *, who: str | None = None, filter: Any | None = None, offset: int | None = None, count: int | None = None) -> Any:
         """Get the info list of server, domain or account mobile devices
 
         Get the info list of server, domain or account mobile devices
@@ -140,7 +140,7 @@ class DeviceMethods:
         }
         return self._client.call("GetDevicesInfoList", **params)
 
-    def set_all_devices_status(self, *, who: Optional[str] = None, filter: Optional[Any] = None, statustype: Optional[str] = None) -> Any:
+    def set_all_devices_status(self, *, who: str | None = None, filter: Any | None = None, statustype: str | None = None) -> Any:
         """Sets the status of all mobile devices that mathces current Who and Filter
 
         Sets the status of all mobile devices that mathces current Who and Filter
@@ -173,7 +173,7 @@ class DeviceMethods:
         }
         return self._client.call("SetAllDevicesStatus", **params)
 
-    def set_device_properties(self, *, deviceid: Optional[str] = None, propertyvaluelist: Optional[Any] = None) -> Any:
+    def set_device_properties(self, *, deviceid: str | None = None, propertyvaluelist: Any | None = None) -> Any:
         """Sets mobile device properties
 
         Sets mobile device properties
@@ -203,7 +203,7 @@ class DeviceMethods:
         }
         return self._client.call("SetDeviceProperties", **params)
 
-    def set_device_status(self, *, deviceid: Optional[str] = None, statustype: Optional[str] = None) -> Any:
+    def set_device_status(self, *, deviceid: str | None = None, statustype: str | None = None) -> Any:
         """Sets the specified mobile device status
 
         Sets the specified mobile device status
@@ -233,7 +233,7 @@ class DeviceMethods:
         }
         return self._client.call("SetDeviceStatus", **params)
 
-    def set_device_wipe(self, *, deviceid: Optional[str] = None, wipetype: Optional[str] = None) -> Any:
+    def set_device_wipe(self, *, deviceid: str | None = None, wipetype: str | None = None) -> Any:
         """Marks selected mobile device for remote wipe
 
         Marks selected mobile device for remote wipe

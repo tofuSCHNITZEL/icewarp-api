@@ -4,6 +4,7 @@ Exposes the high level facade (:class:`IceWarpAPI`), the low level
 transport client (:class:`IceWarpClient`) and the public exceptions.
 """
 
+from .api import AccountType, IceWarpAPI
 from .client import IceWarpClient
 from .exceptions import (
     IceWarpAPIError,
@@ -11,16 +12,16 @@ from .exceptions import (
     IceWarpConnectionError,
     IceWarpError,
 )
-from .api import IceWarpAPI
 
 __version__ = "0.1.0"
 
 __all__ = [
+    "AccountType",
     "IceWarpAPI",
-    "IceWarpClient",
-    "IceWarpError",
     "IceWarpAPIError",
     "IceWarpAuthenticationError",
+    "IceWarpClient",
     "IceWarpConnectionError",
+    "IceWarpError",
     "__version__",
 ]

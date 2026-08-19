@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Iterable, List, Optional
+from collections.abc import Iterable
+from typing import Any
 
 
-def string_list(values: Iterable[Any]) -> Dict[str, Any]:
+def string_list(values: Iterable[Any]) -> dict[str, Any]:
     """Build a ``TPropertyStringList``-shaped parameter.
 
     Several endpoints (``DeleteAccounts``, ``AddAccountMembers``,
@@ -35,7 +36,7 @@ def as_bool_flag(value: bool) -> str:
     return "1" if value else "0"
 
 
-def as_list(value: Optional[Any]) -> List[Any]:
+def as_list(value: Any | None) -> list[Any]:
     """Normalize an XML-derived ``item`` field to a list.
 
     Because the underlying API is XML-based, a field that repeats becomes a
@@ -54,4 +55,3 @@ def as_list(value: Optional[Any]) -> List[Any]:
     if isinstance(value, list):
         return value
     return [value]
-

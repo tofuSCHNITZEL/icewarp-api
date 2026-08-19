@@ -5,7 +5,7 @@ Typed wrappers for endpoints tagged 'Domain related methods' in the IceWarp Main
 
 from __future__ import annotations
 
-from typing import Any, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from ..client import IceWarpClient
@@ -14,10 +14,10 @@ if TYPE_CHECKING:
 class DomainMethods:
     """Typed wrappers for endpoints tagged 'Domain related methods'."""
 
-    def __init__(self, client: "IceWarpClient") -> None:
+    def __init__(self, client: IceWarpClient) -> None:
         self._client = client
 
-    def create_domain(self, *, domainstr: Optional[str] = None, domainproperties: Optional[Any] = None) -> Any:
+    def create_domain(self, *, domainstr: str | None = None, domainproperties: Any | None = None) -> Any:
         """Creates the domain on IceWarp server
 
         Creates the domain on IceWarp server
@@ -47,7 +47,7 @@ class DomainMethods:
         }
         return self._client.call("CreateDomain", **params)
 
-    def delete_domain(self, *, domainstr: Optional[str] = None) -> Any:
+    def delete_domain(self, *, domainstr: str | None = None) -> Any:
         """Deletes the domain on IceWarp server
 
         Deletes the domain on IceWarp server
@@ -94,7 +94,7 @@ class DomainMethods:
         """
         return self._client.call("DKIM_GeneratePrivateKey")
 
-    def get_domain_api_console(self, *, domainstr: Optional[str] = None, filter: Optional[Any] = None, offset: Optional[int] = None, count: Optional[int] = None, comments: Optional[str] = None) -> Any:
+    def get_domain_api_console(self, *, domainstr: str | None = None, filter: Any | None = None, offset: int | None = None, count: int | None = None, comments: str | None = None) -> Any:
         """Gets the list of domain api variables, its values, data types and rights
 
         Gets the list of domain api variables, its values, data types and rights
@@ -133,7 +133,7 @@ class DomainMethods:
         }
         return self._client.call("GetDomainAPIConsole", **params)
 
-    def get_domain_informations(self, *, domainstr: Optional[str] = None) -> Any:
+    def get_domain_informations(self, *, domainstr: str | None = None) -> Any:
         """Gets the domain informations ( currently used for DNS valiadation only )
 
         Gets the domain informations ( currently used for DNS valiadation only )
@@ -158,7 +158,7 @@ class DomainMethods:
         }
         return self._client.call("GetDomainInformations", **params)
 
-    def get_domain_properties(self, *, domainstr: Optional[str] = None, domainpropertylist: Optional[Any] = None) -> Any:
+    def get_domain_properties(self, *, domainstr: str | None = None, domainpropertylist: Any | None = None) -> Any:
         """Gets the values of domain properties
 
         Gets the values of domain properties
@@ -188,7 +188,7 @@ class DomainMethods:
         }
         return self._client.call("GetDomainProperties", **params)
 
-    def get_domains_info_list(self, *, filter: Optional[Any] = None, offset: Optional[int] = None, count: Optional[int] = None) -> Any:
+    def get_domains_info_list(self, *, filter: Any | None = None, offset: int | None = None, count: int | None = None) -> Any:
         """Get the informations about domains available in current session
 
         Get the informations about domains available in current session
@@ -221,7 +221,7 @@ class DomainMethods:
         }
         return self._client.call("GetDomainsInfoList", **params)
 
-    def get_my_domain_rigths(self, *, domainstr: Optional[str] = None, domainpropertylist: Optional[Any] = None) -> Any:
+    def get_my_domain_rigths(self, *, domainstr: str | None = None, domainpropertylist: Any | None = None) -> Any:
         """Gets the rights for domain properties
 
         Gets the rights for domain properties
@@ -251,7 +251,7 @@ class DomainMethods:
         }
         return self._client.call("GetMyDomainRigths", **params)
 
-    def is_guest_domain(self, *, domainstr: Optional[str] = None) -> Any:
+    def is_guest_domain(self, *, domainstr: str | None = None) -> Any:
         """Check if specified domain is external or local to this server
 
         Check if specified domain is external or local to this server
@@ -278,7 +278,7 @@ class DomainMethods:
         }
         return self._client.call("IsGuestDomain", **params)
 
-    def make_domain_primary(self, *, domainstr: Optional[str] = None) -> Any:
+    def make_domain_primary(self, *, domainstr: str | None = None) -> Any:
         """Makes the primary domain from one of the domains on IceWarp server
 
         Makes the primary domain from one of the domains on IceWarp server
@@ -306,7 +306,7 @@ class DomainMethods:
         }
         return self._client.call("MakeDomainPrimary", **params)
 
-    def rename_domain(self, *, oldname: Optional[str] = None, newname: Optional[str] = None) -> Any:
+    def rename_domain(self, *, oldname: str | None = None, newname: str | None = None) -> Any:
         """Renames the domain on IceWarp server
 
         Renames the domain on IceWarp server
@@ -336,7 +336,7 @@ class DomainMethods:
         }
         return self._client.call("RenameDomain", **params)
 
-    def reset_dkim(self, *, domain: Optional[str] = None) -> Any:
+    def reset_dkim(self, *, domain: str | None = None) -> Any:
         """Resets DKIM of domain
 
         Resets DKIM of domain
@@ -363,7 +363,7 @@ class DomainMethods:
         }
         return self._client.call("ResetDKIM", **params)
 
-    def set_domain_properties(self, *, domainstr: Optional[str] = None, propertyvaluelist: Optional[Any] = None) -> Any:
+    def set_domain_properties(self, *, domainstr: str | None = None, propertyvaluelist: Any | None = None) -> Any:
         """Sets the values of domain properties
 
         Sets the values of domain properties

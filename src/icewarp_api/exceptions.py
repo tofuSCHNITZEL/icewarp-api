@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Optional
+from typing import Any
 
 
 class IceWarpError(Exception):
@@ -30,9 +30,9 @@ class IceWarpAPIError(IceWarpError):
         self,
         message: str,
         *,
-        command_name: Optional[str] = None,
+        command_name: str | None = None,
         result: Any = None,
-        raw_response: Optional[dict] = None,
+        raw_response: dict | None = None,
     ) -> None:
         super().__init__(message)
         self.command_name = command_name

@@ -5,7 +5,7 @@ Typed wrappers for endpoints tagged 'Rule related methods' in the IceWarp Mainte
 
 from __future__ import annotations
 
-from typing import Any, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from ..client import IceWarpClient
@@ -14,10 +14,10 @@ if TYPE_CHECKING:
 class RuleMethods:
     """Typed wrappers for endpoints tagged 'Rule related methods'."""
 
-    def __init__(self, client: "IceWarpClient") -> None:
+    def __init__(self, client: IceWarpClient) -> None:
         self._client = client
 
-    def add_my_rule(self, *, rulesettings: Optional[Any] = None) -> Any:
+    def add_my_rule(self, *, rulesettings: Any | None = None) -> Any:
         """Creates new rule in authenticated account from RuleSettings
 
         Creates new rule in authenticated account from RuleSettings
@@ -44,7 +44,7 @@ class RuleMethods:
         }
         return self._client.call("AddMyRule", **params)
 
-    def add_rule(self, *, who: Optional[str] = None, rulesettings: Optional[Any] = None) -> Any:
+    def add_rule(self, *, who: str | None = None, rulesettings: Any | None = None) -> Any:
         """Creates new rule from RuleSettings
 
         Creates new rule from RuleSettings
@@ -74,7 +74,7 @@ class RuleMethods:
         }
         return self._client.call("AddRule", **params)
 
-    def delete_my_rule(self, *, ruleid: Optional[str] = None) -> Any:
+    def delete_my_rule(self, *, ruleid: str | None = None) -> Any:
         """Deletes existing my account rule specified by Id
 
         Deletes existing my account rule specified by Id
@@ -101,7 +101,7 @@ class RuleMethods:
         }
         return self._client.call("DeleteMyRule", **params)
 
-    def delete_rule(self, *, who: Optional[str] = None, ruleid: Optional[str] = None) -> Any:
+    def delete_rule(self, *, who: str | None = None, ruleid: str | None = None) -> Any:
         """Deletes existing rule specified by Id
 
         Deletes existing rule specified by Id
@@ -131,7 +131,7 @@ class RuleMethods:
         }
         return self._client.call("DeleteRule", **params)
 
-    def edit_my_rule(self, *, rulesettings: Optional[Any] = None, ruleid: Optional[str] = None) -> Any:
+    def edit_my_rule(self, *, rulesettings: Any | None = None, ruleid: str | None = None) -> Any:
         """Edits RuleSettings of existing my account rule specified by Id
 
         Edits RuleSettings of existing my account rule specified by Id
@@ -161,7 +161,7 @@ class RuleMethods:
         }
         return self._client.call("EditMyRule", **params)
 
-    def edit_rule(self, *, who: Optional[str] = None, rulesettings: Optional[Any] = None, ruleid: Optional[str] = None) -> Any:
+    def edit_rule(self, *, who: str | None = None, rulesettings: Any | None = None, ruleid: str | None = None) -> Any:
         """Edits RuleSettings of existing rule specified by Id
 
         Edits RuleSettings of existing rule specified by Id
@@ -194,7 +194,7 @@ class RuleMethods:
         }
         return self._client.call("EditRule", **params)
 
-    def get_my_rule(self, *, ruleid: Optional[str] = None) -> Any:
+    def get_my_rule(self, *, ruleid: str | None = None) -> Any:
         """Returns detailed information about my account rule specified by RuleID
 
         Returns detailed information about my account rule specified by RuleID
@@ -221,7 +221,7 @@ class RuleMethods:
         }
         return self._client.call("GetMyRule", **params)
 
-    def get_my_rules_info_list(self, *, filter: Optional[Any] = None, offset: Optional[int] = None, count: Optional[int] = None) -> Any:
+    def get_my_rules_info_list(self, *, filter: Any | None = None, offset: int | None = None, count: int | None = None) -> Any:
         """Get the info list of authenticated user rules
 
         Get the info list of authenticated user rules
@@ -254,7 +254,7 @@ class RuleMethods:
         }
         return self._client.call("GetMyRulesInfoList", **params)
 
-    def get_rule(self, *, who: Optional[str] = None, ruleid: Optional[str] = None) -> Any:
+    def get_rule(self, *, who: str | None = None, ruleid: str | None = None) -> Any:
         """Returns detailed information about rule specified by Who and RuleID
 
         Returns detailed information about rule specified by Who and RuleID
@@ -284,7 +284,7 @@ class RuleMethods:
         }
         return self._client.call("GetRule", **params)
 
-    def get_rules_info_list(self, *, who: Optional[str] = None, filter: Optional[Any] = None, offset: Optional[int] = None, count: Optional[int] = None) -> Any:
+    def get_rules_info_list(self, *, who: str | None = None, filter: Any | None = None, offset: int | None = None, count: int | None = None) -> Any:
         """Get the info list of server, domain or account rules
 
         Get the info list of server, domain or account rules
@@ -320,7 +320,7 @@ class RuleMethods:
         }
         return self._client.call("GetRulesInfoList", **params)
 
-    def move_my_rule(self, *, ruleid: Optional[str] = None, movetype: Optional[str] = None) -> Any:
+    def move_my_rule(self, *, ruleid: str | None = None, movetype: str | None = None) -> Any:
         """Move specified my account Rule up or down
 
         Move specified my account Rule up or down
@@ -351,7 +351,7 @@ class RuleMethods:
         }
         return self._client.call("MoveMyRule", **params)
 
-    def move_rule(self, *, who: Optional[str] = None, ruleid: Optional[str] = None, movetype: Optional[str] = None) -> Any:
+    def move_rule(self, *, who: str | None = None, ruleid: str | None = None, movetype: str | None = None) -> Any:
         """Move specified Rule up or down
 
         Move specified Rule up or down
@@ -384,7 +384,7 @@ class RuleMethods:
         }
         return self._client.call("MoveRule", **params)
 
-    def set_my_rule_active(self, *, ruleid: Optional[str] = None, state: Optional[str] = None) -> Any:
+    def set_my_rule_active(self, *, ruleid: str | None = None, state: str | None = None) -> Any:
         """Set my rule active state
 
         Set my rule active state
@@ -414,7 +414,7 @@ class RuleMethods:
         }
         return self._client.call("SetMyRuleActive", **params)
 
-    def set_rule_active(self, *, who: Optional[str] = None, ruleid: Optional[str] = None, state: Optional[str] = None) -> Any:
+    def set_rule_active(self, *, who: str | None = None, ruleid: str | None = None, state: str | None = None) -> Any:
         """Set rule active state
 
         Set rule active state

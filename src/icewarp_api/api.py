@@ -18,15 +18,31 @@ and exposes:
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional
+from enum import IntEnum
+from typing import Any
 
 import requests
+from typing_extensions import Self
 
-from .client import IceWarpClient, DEFAULT_TIMEOUT
+from .client import DEFAULT_TIMEOUT, IceWarpClient
 from .generated.raw_api import IceWarpRawAPI
 from .helpers import as_list
 
 DEFAULT_PAGE_SIZE = 100
+
+
+class AccountType(IntEnum):
+    """Values of the ``accounttype`` field returned by ``GetAccountsInfoList``."""
+
+    USER = 0
+    MAILING_LIST = 1
+    EXECUTABLE = 2
+    NOTIFICATION = 3
+    STATIC_ROUTE = 4
+    CATALOG = 5
+    LIST_SERVER = 6
+    GROUP = 7
+    RESOURCE = 8
 
 
 class IceWarpAPI:
@@ -61,14 +77,14 @@ class IceWarpAPI:
     def __init__(
         self,
         base_url: str,
-        email: Optional[str] = None,
-        password: Optional[str] = None,
+        email: str | None = None,
+        password: str | None = None,
         *,
         auth_type: str = "plain",
         timeout: float = DEFAULT_TIMEOUT,
         verify_ssl: bool = True,
-        session: Optional[requests.Session] = None,
-        sid: Optional[str] = None,
+        session: requests.Session | None = None,
+        sid: str | None = None,
     ) -> None:
         self.client = IceWarpClient(
             base_url,
@@ -85,7 +101,7 @@ class IceWarpAPI:
     # -- session/auth lifecycle ---------------------------------------------
 
     @property
-    def sid(self) -> Optional[str]:
+    def sid(self) -> str | None:
         """The current session id, or ``None`` if not authenticated."""
         return self.client.sid
 
@@ -108,7 +124,7 @@ class IceWarpAPI:
     def close(self) -> None:
         self.client.close()
 
-    def __enter__(self) -> "IceWarpAPI":
+    def __enter__(self) -> Self:
         self.client.__enter__()
         return self
 
@@ -118,8 +134,12 @@ class IceWarpAPI:
     # -- curated, higher-level helpers ---------------------------------------
 
     def get_all_accounts(
-        self, *, domain: Optional[str] = None, page_size: int = DEFAULT_PAGE_SIZE
-    ) -> List[Dict[str, Any]]:
+        self,
+        *,
+        domain: str | None = None,
+        page_size: int = DEFAULT_PAGE_SIZE,
+        account_type: AccountType | None = None,
+    ) -> list[dict[str, Any]]:
         """Fetch every account on the server, across all domains.
 
         IceWarp's ``GetAccountsInfoList`` endpoint (``api.iw.accounts.get_accounts_info_list``)
@@ -135,6 +155,9 @@ class IceWarpAPI:
                 every domain on the server.
             page_size: Number of accounts requested per page while
                 paginating through ``GetAccountsInfoList``.
+            account_type: Only return accounts of this type, e.g.
+                :attr:`AccountType.GROUP`. Sent to the server as the
+                ``filter.typemask`` parameter of ``GetAccountsInfoList``.
 
         Returns:
             A list of account dicts (as returned by ``GetAccountsInfoList``),
@@ -153,14 +176,23 @@ class IceWarpAPI:
             )
             domain_names = [d["name"] for d in domain_items]
 
-        accounts: List[Dict[str, Any]] = []
+        account_filter = (
+            None if account_type is None else {"typemask": str(int(account_type))}
+        )
+
+        accounts: list[dict[str, Any]] = []
         for domain_name in domain_names:
             offset = 0
             while True:
                 result = self.iw.accounts.get_accounts_info_list(
-                    domainstr=domain_name, offset=offset, count=page_size
+                    domainstr=domain_name,
+                    filter=account_filter,
+                    offset=offset,
+                    count=page_size,
                 )
-                items = as_list(result.get("item") if isinstance(result, dict) else None)
+                items = as_list(
+                    result.get("item") if isinstance(result, dict) else None
+                )
                 if not items:
                     break
                 for account in items:
@@ -171,3 +203,61 @@ class IceWarpAPI:
                 offset += page_size
 
         return accounts
+
+    def get_all_users(
+        self, *, domain: str | None = None, page_size: int = DEFAULT_PAGE_SIZE
+    ) -> list[dict[str, Any]]:
+        """Fetch every user mailbox on the server, across all domains.
+
+        Same as :meth:`get_all_accounts`, with the server filtering on
+        :attr:`AccountType.USER` - i.e. excluding groups, mailing lists,
+        resources and the other non-mailbox account types.
+
+        Args:
+            domain: Only fetch users for this domain name.
+            page_size: Number of items requested per page.
+
+        Returns:
+            A list of user dicts, each with an added ``"domain"`` key.
+        """
+        return self.get_all_accounts(
+            domain=domain, page_size=page_size, account_type=AccountType.USER
+        )
+
+    def get_all_mailing_lists(
+        self, *, domain: str | None = None, page_size: int = DEFAULT_PAGE_SIZE
+    ) -> list[dict[str, Any]]:
+        """Fetch every mailing list on the server, across all domains.
+
+        Same as :meth:`get_all_accounts`, with the server filtering on
+        :attr:`AccountType.MAILING_LIST`.
+
+        Args:
+            domain: Only fetch mailing lists for this domain name.
+            page_size: Number of items requested per page.
+
+        Returns:
+            A list of mailing list dicts, each with an added ``"domain"`` key.
+        """
+        return self.get_all_accounts(
+            domain=domain, page_size=page_size, account_type=AccountType.MAILING_LIST
+        )
+
+    def get_all_groups(
+        self, *, domain: str | None = None, page_size: int = DEFAULT_PAGE_SIZE
+    ) -> list[dict[str, Any]]:
+        """Fetch every group on the server, across all domains.
+
+        Same as :meth:`get_all_accounts`, with the server filtering on
+        :attr:`AccountType.GROUP`.
+
+        Args:
+            domain: Only fetch groups for this domain name.
+            page_size: Number of items requested per page.
+
+        Returns:
+            A list of group dicts, each with an added ``"domain"`` key.
+        """
+        return self.get_all_accounts(
+            domain=domain, page_size=page_size, account_type=AccountType.GROUP
+        )

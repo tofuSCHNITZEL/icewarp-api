@@ -5,7 +5,7 @@ Typed wrappers for endpoints tagged 'Spam queues related methods' in the IceWarp
 
 from __future__ import annotations
 
-from typing import Any, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from ..client import IceWarpClient
@@ -14,10 +14,10 @@ if TYPE_CHECKING:
 class SpamQueuesMethods:
     """Typed wrappers for endpoints tagged 'Spam queues related methods'."""
 
-    def __init__(self, client: "IceWarpClient") -> None:
+    def __init__(self, client: IceWarpClient) -> None:
         self._client = client
 
-    def add_spam_queue_item(self, *, info: Optional[Any] = None) -> Any:
+    def add_spam_queue_item(self, *, info: Any | None = None) -> Any:
         """Adds the item to the Spam Queues ( whitelist / blacklist )
 
         Adds the item to the Spam Queues ( whitelist / blacklist )
@@ -44,7 +44,7 @@ class SpamQueuesMethods:
         }
         return self._client.call("AddSpamQueueItem", **params)
 
-    def black_list_spam_queue_item(self, *, itemid: Optional[str] = None) -> Any:
+    def black_list_spam_queue_item(self, *, itemid: str | None = None) -> Any:
         """Blacklist the item in Spam Queue
 
         Blacklist the item in Spam Queue
@@ -71,7 +71,7 @@ class SpamQueuesMethods:
         }
         return self._client.call("BlackListSpamQueueItem", **params)
 
-    def delete_spam_queue_item(self, *, itemid: Optional[str] = None) -> Any:
+    def delete_spam_queue_item(self, *, itemid: str | None = None) -> Any:
         """Deletes the item from Spam Queues
 
         Deletes the item from Spam Queues
@@ -98,7 +98,7 @@ class SpamQueuesMethods:
         }
         return self._client.call("DeleteSpamQueueItem", **params)
 
-    def deliver_spam_queue_item(self, *, itemid: Optional[str] = None) -> Any:
+    def deliver_spam_queue_item(self, *, itemid: str | None = None) -> Any:
         """Delivers the item in Spam Queue ( quarantine )
 
         Delivers the item in Spam Queue ( quarantine )
@@ -125,7 +125,7 @@ class SpamQueuesMethods:
         }
         return self._client.call("DeliverSpamQueueItem", **params)
 
-    def get_spam_queue_info_list(self, *, queuetype: Optional[str] = None, filter: Optional[Any] = None, offset: Optional[int] = None, count: Optional[int] = None) -> Any:
+    def get_spam_queue_info_list(self, *, queuetype: str | None = None, filter: Any | None = None, offset: int | None = None, count: int | None = None) -> Any:
         """Gets the spam queue list
 
         Gets the spam queue list
@@ -161,7 +161,7 @@ class SpamQueuesMethods:
         }
         return self._client.call("GetSpamQueueInfoList", **params)
 
-    def get_spam_queue_item_body(self, *, itemid: Optional[str] = None) -> Any:
+    def get_spam_queue_item_body(self, *, itemid: str | None = None) -> Any:
         """Returns the body of Spam Queue item
 
         Returns the body of Spam Queue item
@@ -188,7 +188,7 @@ class SpamQueuesMethods:
         }
         return self._client.call("GetSpamQueueItemBody", **params)
 
-    def white_list_spam_queue_item(self, *, itemid: Optional[str] = None) -> Any:
+    def white_list_spam_queue_item(self, *, itemid: str | None = None) -> Any:
         """Whitelist the item in Spam Queue
 
         Whitelist the item in Spam Queue

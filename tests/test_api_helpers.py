@@ -89,3 +89,56 @@ def test_get_all_accounts_empty_domain_returns_empty_list(requests_mock):
     requests_mock.post(f"{BASE_URL}/GetAccountsInfoList", text=xml_result("<result></result>"))
     api = IceWarpAPI(BASE_URL, sid="sid-123")
     assert api.get_all_accounts(domain="empty.example.com") == []
+
+
+def test_get_all_users_sends_typemask(requests_mock):
+    requests_mock.post(
+        f"{BASE_URL}/GetAccountsInfoList",
+        text=xml_result("<result><item><email>user1@example.com</email></item></result>"),
+    )
+    api = IceWarpAPI(BASE_URL, sid="sid-123")
+    users = api.get_all_users(domain="example.com")
+
+    assert [entry["email"] for entry in users] == ["user1@example.com"]
+    body = requests_mock.request_history[-1].body.decode("utf-8")
+    assert "<filter><typemask>0</typemask></filter>" in body
+
+
+def test_get_all_mailing_lists_sends_typemask(requests_mock):
+    requests_mock.post(
+        f"{BASE_URL}/GetAccountsInfoList",
+        text=xml_result("<result><item><email>list1@example.com</email></item></result>"),
+    )
+    api = IceWarpAPI(BASE_URL, sid="sid-123")
+    lists = api.get_all_mailing_lists(domain="example.com")
+
+    assert [entry["email"] for entry in lists] == ["list1@example.com"]
+    body = requests_mock.request_history[-1].body.decode("utf-8")
+    assert "<filter><typemask>1</typemask></filter>" in body
+
+
+def test_get_all_groups_sends_typemask(requests_mock):
+    requests_mock.post(
+        f"{BASE_URL}/GetAccountsInfoList",
+        text=xml_result("<result><item><email>group1@example.com</email></item></result>"),
+    )
+    api = IceWarpAPI(BASE_URL, sid="sid-123")
+    groups = api.get_all_groups(domain="example.com")
+
+    assert [entry["email"] for entry in groups] == ["group1@example.com"]
+    assert groups[0]["domain"] == "example.com"
+    body = requests_mock.request_history[-1].body.decode("utf-8")
+    assert "<filter><typemask>7</typemask></filter>" in body
+
+
+def test_get_all_accounts_omits_filter_by_default(requests_mock):
+    requests_mock.post(
+        f"{BASE_URL}/GetAccountsInfoList",
+        text=xml_result("<result><item><email>user1@example.com</email></item></result>"),
+    )
+    api = IceWarpAPI(BASE_URL, sid="sid-123")
+    api.get_all_accounts(domain="example.com")
+
+    body = requests_mock.request_history[-1].body.decode("utf-8")
+    assert "<filter>" not in body
+

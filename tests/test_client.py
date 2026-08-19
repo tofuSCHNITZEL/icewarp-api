@@ -3,7 +3,11 @@
 import pytest
 
 from icewarp_api.client import IceWarpClient, _normalize_base_url
-from icewarp_api.exceptions import IceWarpAPIError, IceWarpAuthenticationError, IceWarpConnectionError
+from icewarp_api.exceptions import (
+    IceWarpAPIError,
+    IceWarpAuthenticationError,
+    IceWarpConnectionError,
+)
 
 BASE_URL = "http://icewarp.example.com/icewarpapi"
 

@@ -14,7 +14,7 @@ import os
 import typing
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, List, Optional, Union, get_args, get_origin
+from typing import Any, Optional, Union, get_args, get_origin
 
 import typer
 
@@ -45,7 +45,12 @@ RAW_API_PANEL = "Raw API categories (1:1 wrappers, one group per API category)"
 
 # category CLI group name -> (generated class, IceWarpAPI facade attribute, help text)
 CATEGORY_APPS = [
-    ("sessions", gen.SessionMethods, "sessions", "Session, login and authentication related commands"),
+    (
+        "sessions",
+        gen.SessionMethods,
+        "sessions",
+        "Session, login and authentication related commands",
+    ),
     ("oauth", gen.OauthMethods, "oauth", "OAuth client/authorization related commands"),
     ("accounts", gen.AccountMethods, "accounts", "Account management commands"),
     ("signup", gen.SignupMethods, "signup", "Signup / self-service commands"),
@@ -58,29 +63,46 @@ CATEGORY_APPS = [
         "account_members",
         "Account member (groups/mailing lists) commands",
     ),
-    ("service", gen.ServiceStatisticsMethods, "service", "Service & statistics commands"),
-    ("certificates", gen.CertificateMethods, "certificates", "TLS certificate management commands"),
+    (
+        "service",
+        gen.ServiceStatisticsMethods,
+        "service",
+        "Service & statistics commands",
+    ),
+    (
+        "certificates",
+        gen.CertificateMethods,
+        "certificates",
+        "TLS certificate management commands",
+    ),
     ("spam-queues", gen.SpamQueuesMethods, "spam_queues", "Spam queue commands"),
     ("server", gen.ServerMethods, "server", "Server property commands"),
-    ("smart-discover", gen.SmartDiscoverMethods, "smart_discover", "SmartDiscover commands"),
+    (
+        "smart-discover",
+        gen.SmartDiscoverMethods,
+        "smart_discover",
+        "SmartDiscover commands",
+    ),
     ("license", gen.LicenseMethods, "license", "License info commands"),
 ]
 
-CONFIG_DIR = Path(os.environ.get("ICEWARP_API_CONFIG_DIR", str(Path.home() / ".icewarp_api")))
+CONFIG_DIR = Path(
+    os.environ.get("ICEWARP_API_CONFIG_DIR", str(Path.home() / ".icewarp_api"))
+)
 SESSION_FILE = CONFIG_DIR / "session.json"
 
 
 @dataclass
 class CliConfig:
-    base_url: Optional[str]
-    email: Optional[str]
-    password: Optional[str]
+    base_url: str | None
+    email: str | None
+    password: str | None
     verify_ssl: bool
     timeout: float
     use_cache: bool
 
 
-def _load_session() -> Optional[dict]:
+def _load_session() -> dict | None:
     if not SESSION_FILE.exists():
         return None
     try:
@@ -89,7 +111,7 @@ def _load_session() -> Optional[dict]:
         return None
 
 
-def _save_session(base_url: str, email: Optional[str], sid: str) -> None:
+def _save_session(base_url: str, email: str | None, sid: str) -> None:
     CONFIG_DIR.mkdir(parents=True, exist_ok=True)
     SESSION_FILE.write_text(
         json.dumps({"base_url": base_url, "email": email, "sid": sid}), encoding="utf-8"
@@ -151,7 +173,11 @@ def _get_api(ctx: typer.Context) -> IceWarpAPI:
         raise typer.Exit(code=1)
 
     api = IceWarpAPI(
-        base_url, cfg.email, cfg.password, verify_ssl=cfg.verify_ssl, timeout=cfg.timeout
+        base_url,
+        cfg.email,
+        cfg.password,
+        verify_ssl=cfg.verify_ssl,
+        timeout=cfg.timeout,
     )
 
     if cached and cached.get("base_url") == base_url and cached.get("sid"):
@@ -188,10 +214,16 @@ def _make_cli_command(method_name: str, method: Any, category_attr: str):
     # generated modules use `from __future__ import annotations`, so
     # signature().annotation is a string; resolve real types via get_type_hints.
     type_hints = typing.get_type_hints(method)
-    cli_params: List[tuple] = []
-    parameters = [inspect.Parameter("ctx", kind=inspect.Parameter.POSITIONAL_OR_KEYWORD, annotation=typer.Context)]
+    cli_params: list[tuple] = []
+    parameters = [
+        inspect.Parameter(
+            "ctx",
+            kind=inspect.Parameter.POSITIONAL_OR_KEYWORD,
+            annotation=typer.Context,
+        )
+    ]
 
-    for pname, p in sig.parameters.items():
+    for pname in sig.parameters:
         if pname == "self":
             continue
         kind = _param_kind(type_hints.get(pname, str))
@@ -204,7 +236,12 @@ def _make_cli_command(method_name: str, method: Any, category_attr: str):
         cli_params.append((pname, kind))
         option = typer.Option(None, flag, help=help_text)
         parameters.append(
-            inspect.Parameter(pname, kind=inspect.Parameter.KEYWORD_ONLY, default=option, annotation=Optional[str])
+            inspect.Parameter(
+                pname,
+                kind=inspect.Parameter.KEYWORD_ONLY,
+                default=option,
+                annotation=Optional[str],
+            )
         )
 
     def _command(**kwargs):
@@ -230,7 +267,9 @@ def _make_cli_command(method_name: str, method: Any, category_attr: str):
 def _register_category_apps() -> None:
     for cli_name, cls, attr_name, help_text in CATEGORY_APPS:
         sub_app = typer.Typer(help=help_text, no_args_is_help=True)
-        for method_name, method in inspect.getmembers(cls, predicate=inspect.isfunction):
+        for method_name, method in inspect.getmembers(
+            cls, predicate=inspect.isfunction
+        ):
             if method_name.startswith("_"):
                 continue
             command = _make_cli_command(method_name, method, attr_name)
@@ -241,19 +280,27 @@ def _register_category_apps() -> None:
 @app.callback()
 def main(
     ctx: typer.Context,
-    url: Optional[str] = typer.Option(
-        None, "--url", "-u", envvar="ICEWARP_API_URL", help="Base API URL, e.g. https://mail.example.com:32001/icewarpapi"
+    url: str | None = typer.Option(
+        None,
+        "--url",
+        "-u",
+        envvar="ICEWARP_API_URL",
+        help="Base API URL, e.g. https://mail.example.com:32001/icewarpapi",
     ),
-    email: Optional[str] = typer.Option(
+    email: str | None = typer.Option(
         None, "--email", "-e", envvar="ICEWARP_API_EMAIL", help="Account email/username"
     ),
-    password: Optional[str] = typer.Option(
+    password: str | None = typer.Option(
         None, "--password", "-p", envvar="ICEWARP_API_PASSWORD", help="Account password"
     ),
-    insecure: bool = typer.Option(False, "--insecure", help="Disable TLS certificate verification"),
+    insecure: bool = typer.Option(
+        False, "--insecure", help="Disable TLS certificate verification"
+    ),
     timeout: float = typer.Option(30.0, "--timeout", help="HTTP timeout in seconds"),
     no_session_cache: bool = typer.Option(
-        False, "--no-session-cache", help="Do not read/write the local session cache file"
+        False,
+        "--no-session-cache",
+        help="Do not read/write the local session cache file",
     ),
 ) -> None:
     ctx.obj = CliConfig(
@@ -297,7 +344,13 @@ def login(ctx: typer.Context) -> None:
         )
         raise typer.Exit(code=1)
 
-    api = IceWarpAPI(base_url, cfg.email, cfg.password, verify_ssl=cfg.verify_ssl, timeout=cfg.timeout)
+    api = IceWarpAPI(
+        base_url,
+        cfg.email,
+        cfg.password,
+        verify_ssl=cfg.verify_ssl,
+        timeout=cfg.timeout,
+    )
     try:
         sid = api.login()
     except IceWarpError as exc:
@@ -306,13 +359,17 @@ def login(ctx: typer.Context) -> None:
 
     if cfg.use_cache:
         _save_session(base_url, cfg.email, sid)
-        typer.secho(f"Logged in as {cfg.email}. Session id: {sid}", fg=typer.colors.GREEN)
+        typer.secho(
+            f"Logged in as {cfg.email}. Session id: {sid}", fg=typer.colors.GREEN
+        )
         typer.secho(
             "Cached session (including the API URL) - later calls don't need --url/--email/--password.",
             fg=typer.colors.GREEN,
         )
     else:
-        typer.secho(f"Logged in as {cfg.email}. Session id: {sid}", fg=typer.colors.GREEN)
+        typer.secho(
+            f"Logged in as {cfg.email}. Session id: {sid}", fg=typer.colors.GREEN
+        )
 
 
 @app.command(rich_help_panel=HIGH_LEVEL_PANEL)
@@ -356,26 +413,37 @@ def status(ctx: typer.Context) -> None:
         "session_cache_file": str(SESSION_FILE),
         "session_cache_enabled": cfg.use_cache,
         "cached_session": cached,
-        "effective_base_url": cfg.base_url or (cached.get("base_url") if cached else None),
+        "effective_base_url": cfg.base_url
+        or (cached.get("base_url") if cached else None),
         "verify_ssl": cfg.verify_ssl,
         "timeout": cfg.timeout,
     }
     _print_result(info)
 
     if not cfg.use_cache:
-        typer.secho("Note: --no-session-cache is set, so the cache above is not being used.", fg=typer.colors.YELLOW)
+        typer.secho(
+            "Note: --no-session-cache is set, so the cache above is not being used.",
+            fg=typer.colors.YELLOW,
+        )
     elif not cached:
-        typer.secho("No cached session found. Run `icewarp-api login` to create one.", fg=typer.colors.YELLOW)
+        typer.secho(
+            "No cached session found. Run `icewarp-api login` to create one.",
+            fg=typer.colors.YELLOW,
+        )
 
 
 @app.command(name="get-all-accounts", rich_help_panel=TOOLKIT_PANEL)
 def get_all_accounts_command(
     ctx: typer.Context,
-    domain: Optional[str] = typer.Option(
-        None, "--domain", help="Only list accounts in this domain, instead of every domain on the server"
+    domain: str | None = typer.Option(
+        None,
+        "--domain",
+        help="Only list accounts in this domain, instead of every domain on the server",
     ),
     page_size: int = typer.Option(
-        100, "--page-size", help="Number of accounts requested per page while paginating"
+        100,
+        "--page-size",
+        help="Number of accounts requested per page while paginating",
     ),
 ) -> None:
     """List every account across all domains (curated helper, not a 1:1 endpoint).
@@ -391,12 +459,89 @@ def get_all_accounts_command(
     _print_result(result)
 
 
+@app.command(name="get-all-users", rich_help_panel=TOOLKIT_PANEL)
+def get_all_users_command(
+    ctx: typer.Context,
+    domain: str | None = typer.Option(
+        None,
+        "--domain",
+        help="Only list users in this domain, instead of every domain on the server",
+    ),
+    page_size: int = typer.Option(
+        100,
+        "--page-size",
+        help="Number of accounts requested per page while paginating",
+    ),
+) -> None:
+    """List every user mailbox across all domains (curated helper).
+
+    Like `get-all-accounts`, but asks the server for accounts of type USER
+    only, so groups, mailing lists, resources etc. are excluded.
+    """
+    api = _get_api(ctx)
+    result = api.get_all_users(domain=domain, page_size=page_size)
+    _print_result(result)
+
+
+@app.command(name="get-all-mailing-lists", rich_help_panel=TOOLKIT_PANEL)
+def get_all_mailing_lists_command(
+    ctx: typer.Context,
+    domain: str | None = typer.Option(
+        None,
+        "--domain",
+        help="Only list mailing lists in this domain, instead of every domain on the server",
+    ),
+    page_size: int = typer.Option(
+        100,
+        "--page-size",
+        help="Number of accounts requested per page while paginating",
+    ),
+) -> None:
+    """List every mailing list across all domains (curated helper).
+
+    Like `get-all-accounts`, but asks the server for accounts of type
+    MAILING_LIST only.
+    """
+    api = _get_api(ctx)
+    result = api.get_all_mailing_lists(domain=domain, page_size=page_size)
+    _print_result(result)
+
+
+@app.command(name="get-all-groups", rich_help_panel=TOOLKIT_PANEL)
+def get_all_groups_command(
+    ctx: typer.Context,
+    domain: str | None = typer.Option(
+        None,
+        "--domain",
+        help="Only list groups in this domain, instead of every domain on the server",
+    ),
+    page_size: int = typer.Option(
+        100,
+        "--page-size",
+        help="Number of accounts requested per page while paginating",
+    ),
+) -> None:
+    """List every group across all domains (curated helper).
+
+    Like `get-all-accounts`, but asks the server for accounts of type GROUP
+    only.
+    """
+    api = _get_api(ctx)
+    result = api.get_all_groups(domain=domain, page_size=page_size)
+    _print_result(result)
+
+
 @app.command(name="call", rich_help_panel=HIGH_LEVEL_PANEL)
 def call_command(
     ctx: typer.Context,
-    command_name: str = typer.Argument(..., help="Endpoint command name, e.g. GetDomainsInfoList"),
-    param: List[str] = typer.Option(
-        [], "--param", "-P", help="key=value pair, repeatable. Value is parsed as JSON when possible."
+    command_name: str = typer.Argument(
+        ..., help="Endpoint command name, e.g. GetDomainsInfoList"
+    ),
+    param: list[str] = typer.Option(  # noqa: B008
+        [],
+        "--param",
+        "-P",
+        help="key=value pair, repeatable. Value is parsed as JSON when possible.",
     ),
 ) -> None:
     """Call any of the 174 documented endpoints directly by command name.
@@ -408,7 +553,11 @@ def call_command(
     kwargs = {}
     for item in param:
         if "=" not in item:
-            typer.secho(f"Invalid --param {item!r}, expected key=value", fg=typer.colors.RED, err=True)
+            typer.secho(
+                f"Invalid --param {item!r}, expected key=value",
+                fg=typer.colors.RED,
+                err=True,
+            )
             raise typer.Exit(code=1)
         key, _, value = item.partition("=")
         kwargs[key] = _convert_cli_value(value, "any")

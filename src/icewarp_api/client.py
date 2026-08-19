@@ -3,12 +3,17 @@
 from __future__ import annotations
 
 import xml.etree.ElementTree as ET
-from typing import Any, Dict, Optional
+from typing import Any
 
 import requests
+from typing_extensions import Self
 
 from . import xmlcodec
-from .exceptions import IceWarpAPIError, IceWarpAuthenticationError, IceWarpConnectionError
+from .exceptions import (
+    IceWarpAPIError,
+    IceWarpAuthenticationError,
+    IceWarpConnectionError,
+)
 
 DEFAULT_TIMEOUT = 30
 API_PATH_SUFFIX = "icewarpapi"
@@ -49,14 +54,14 @@ class IceWarpClient:
     def __init__(
         self,
         base_url: str,
-        email: Optional[str] = None,
-        password: Optional[str] = None,
+        email: str | None = None,
+        password: str | None = None,
         *,
         auth_type: str = "plain",
         timeout: float = DEFAULT_TIMEOUT,
         verify_ssl: bool = True,
-        session: Optional[requests.Session] = None,
-        sid: Optional[str] = None,
+        session: requests.Session | None = None,
+        sid: str | None = None,
     ) -> None:
         self.base_url = _normalize_base_url(base_url)
         self.email = email
@@ -70,7 +75,7 @@ class IceWarpClient:
     # -- session management -------------------------------------------------
 
     @property
-    def sid(self) -> Optional[str]:
+    def sid(self) -> str | None:
         """The current session id, or ``None`` if not authenticated."""
         return self._sid
 
@@ -80,12 +85,12 @@ class IceWarpClient:
 
     def login(
         self,
-        email: Optional[str] = None,
-        password: Optional[str] = None,
+        email: str | None = None,
+        password: str | None = None,
         *,
-        auth_type: Optional[str] = None,
-        persistent_login: Optional[str] = None,
-        totp_code: Optional[str] = None,
+        auth_type: str | None = None,
+        persistent_login: str | None = None,
+        totp_code: str | None = None,
     ) -> str:
         """Authenticate with plain email/password and store the session id.
 
@@ -100,7 +105,7 @@ class IceWarpClient:
                 "An 'email' and 'password' are required to authenticate."
             )
 
-        params: Dict[str, Any] = {
+        params: dict[str, Any] = {
             "authtype": auth_type or self.auth_type,
             "email": email,
             "password": password,
@@ -134,7 +139,7 @@ class IceWarpClient:
     def close(self) -> None:
         self._http.close()
 
-    def __enter__(self) -> "IceWarpClient":
+    def __enter__(self) -> Self:
         if not self.is_authenticated and self.email and self.password is not None:
             self.login()
         return self
@@ -170,15 +175,15 @@ class IceWarpClient:
             return query.get("result")
         return None
 
-    def call_raw(self, command_name: str, **params: Any) -> Dict[str, Any]:
+    def call_raw(self, command_name: str, **params: Any) -> dict[str, Any]:
         """Like :meth:`call` but returns the full parsed response envelope."""
         return self._request(command_name, params, sid=self._sid)
 
     # -- internals --------------------------------------------------------
 
     def _request(
-        self, command_name: str, params: Optional[Dict[str, Any]], *, sid: Optional[str]
-    ) -> Dict[str, Any]:
+        self, command_name: str, params: dict[str, Any] | None, *, sid: str | None
+    ) -> dict[str, Any]:
         url = f"{self.base_url}/{command_name}"
         body = xmlcodec.build_request(command_name.lower(), params, sid=sid)
 
@@ -191,7 +196,9 @@ class IceWarpClient:
                 verify=self.verify_ssl,
             )
         except requests.RequestException as exc:
-            raise IceWarpConnectionError(f"Failed to reach IceWarp API at {url}: {exc}") from exc
+            raise IceWarpConnectionError(
+                f"Failed to reach IceWarp API at {url}: {exc}"
+            ) from exc
 
         if http_response.status_code >= 400:
             raise IceWarpConnectionError(
@@ -211,7 +218,11 @@ class IceWarpClient:
         if parsed.get("type") == "error":
             query = parsed.get("query") if isinstance(parsed.get("query"), dict) else {}
             result = query.get("result") if isinstance(query, dict) else None
-            detail = result or (query.get("errortext") if isinstance(query, dict) else None) or parsed
+            detail = (
+                result
+                or (query.get("errortext") if isinstance(query, dict) else None)
+                or parsed
+            )
             raise IceWarpAPIError(
                 f"IceWarp API returned an error response for {command_name}: {detail}",
                 command_name=command_name,

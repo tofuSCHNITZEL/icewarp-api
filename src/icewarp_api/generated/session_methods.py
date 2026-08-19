@@ -5,7 +5,7 @@ Typed wrappers for endpoints tagged 'Session related methods' in the IceWarp Mai
 
 from __future__ import annotations
 
-from typing import Any, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from ..client import IceWarpClient
@@ -14,10 +14,10 @@ if TYPE_CHECKING:
 class SessionMethods:
     """Typed wrappers for endpoints tagged 'Session related methods'."""
 
-    def __init__(self, client: "IceWarpClient") -> None:
+    def __init__(self, client: IceWarpClient) -> None:
         self._client = client
 
-    def authenticate(self, *, authtype: Optional[str] = None, email: Optional[str] = None, password: Optional[str] = None, digest: Optional[str] = None, persistentlogin: Optional[str] = None, totpcode: Optional[str] = None) -> Any:
+    def authenticate(self, *, authtype: str | None = None, email: str | None = None, password: str | None = None, digest: str | None = None, persistentlogin: str | None = None, totpcode: str | None = None) -> Any:
         """Authenticates user in IceWarp server and creates his session
 
         Authenticates user in IceWarp server and creates his session
@@ -58,7 +58,7 @@ class SessionMethods:
         }
         return self._client.call("Authenticate", **params)
 
-    def authenticate_gateway(self, *, hash: Optional[str] = None) -> Any:
+    def authenticate_gateway(self, *, hash: str | None = None) -> Any:
         """Authenticates gateway account ( account that does not exist on current server , but hash some quarantine here )
 
         Authenticates gateway account ( account that does not exist on current server , but hash some quarantine here )
@@ -85,7 +85,7 @@ class SessionMethods:
         }
         return self._client.call("AuthenticateGateway", **params)
 
-    def authenticate_jwt(self, *, token: Optional[str] = None) -> Any:
+    def authenticate_jwt(self, *, token: str | None = None) -> Any:
         """Creates user session by provided JWT token
 
         Creates user session by provided JWT token
@@ -112,7 +112,7 @@ class SessionMethods:
         }
         return self._client.call("AuthenticateJWT", **params)
 
-    def authenticate_sso(self, *, ssotoken: Optional[str] = None, host: Optional[str] = None) -> Any:
+    def authenticate_sso(self, *, ssotoken: str | None = None, host: str | None = None) -> Any:
         """Authenticates using authentication SSO token
 
         Authenticates using authentication SSO token
@@ -142,7 +142,7 @@ class SessionMethods:
         }
         return self._client.call("AuthenticateSSO", **params)
 
-    def authenticate_team_chat_api(self, *, externaldeviceid: Optional[str] = None) -> Any:
+    def authenticate_team_chat_api(self, *, externaldeviceid: str | None = None) -> Any:
         """Returns the authentication token for TeamChat for the currently logged in user
 
         Returns the authentication token for TeamChat for the currently logged in user
@@ -169,7 +169,7 @@ class SessionMethods:
         }
         return self._client.call("AuthenticateTeamChatApi", **params)
 
-    def authenticate_token(self, *, token: Optional[str] = None) -> Any:
+    def authenticate_token(self, *, token: str | None = None) -> Any:
         """Authenticates using authentication token
 
         Authenticates using authentication token
@@ -196,7 +196,7 @@ class SessionMethods:
         }
         return self._client.call("AuthenticateToken", **params)
 
-    def authenticate_web_client(self, *, webclientsessionid: Optional[str] = None) -> Any:
+    def authenticate_web_client(self, *, webclientsessionid: str | None = None) -> Any:
         """Authenticates using weblclient session id
 
         Authenticates using weblclient session id
@@ -223,7 +223,7 @@ class SessionMethods:
         }
         return self._client.call("AuthenticateWebClient", **params)
 
-    def get_account_chat_history(self, *, accountemail: Optional[str] = None, withemail: Optional[str] = None, from_: Optional[str] = None, to_: Optional[str] = None, max: Optional[str] = None) -> Any:
+    def get_account_chat_history(self, *, accountemail: str | None = None, withemail: str | None = None, from_: str | None = None, to_: str | None = None, max: str | None = None) -> Any:
         """Get user IM roster
 
         Get user IM roster
@@ -261,7 +261,7 @@ class SessionMethods:
         }
         return self._client.call("GetAccountChatHistory", **params)
 
-    def get_account_chat_roster(self, *, accountemail: Optional[str] = None) -> Any:
+    def get_account_chat_roster(self, *, accountemail: str | None = None) -> Any:
         """Get user IM roster
 
         Get user IM roster
@@ -288,7 +288,7 @@ class SessionMethods:
         }
         return self._client.call("GetAccountChatRoster", **params)
 
-    def get_auth_challenge(self, *, authtype: Optional[str] = None) -> Any:
+    def get_auth_challenge(self, *, authtype: str | None = None) -> Any:
         """Get the challenge string for RSA authentication type
 
         Get the challenge string for RSA authentication type
@@ -315,7 +315,7 @@ class SessionMethods:
         }
         return self._client.call("GetAuthChallenge", **params)
 
-    def get_auth_token(self, *, authtype: Optional[str] = None, email: Optional[str] = None, password: Optional[str] = None, digest: Optional[str] = None, persistentlogin: Optional[str] = None, totpcode: Optional[str] = None) -> Any:
+    def get_auth_token(self, *, authtype: str | None = None, email: str | None = None, password: str | None = None, digest: str | None = None, persistentlogin: str | None = None, totpcode: str | None = None) -> Any:
         """Authenticates and returns authentication token that can be used for both webadmin and webclient
 
         Authenticates and returns authentication token that can be used for both webadmin and webclient
@@ -356,7 +356,7 @@ class SessionMethods:
         }
         return self._client.call("GetAuthToken", **params)
 
-    def get_avatar(self, *, email: Optional[str] = None) -> Any:
+    def get_avatar(self, *, email: str | None = None) -> Any:
         """Authenticates and returns authentication token that can be used for both webadmin and webclient
 
         Authenticates and returns authentication token that can be used for both webadmin and webclient
@@ -383,7 +383,7 @@ class SessionMethods:
         }
         return self._client.call("GetAvatar", **params)
 
-    def get_avatar_token(self, *, email: Optional[str] = None) -> Any:
+    def get_avatar_token(self, *, email: str | None = None) -> Any:
         """Authenticates and returns authentication token that can be used for both webadmin and webclient
 
         Authenticates and returns authentication token that can be used for both webadmin and webclient
@@ -410,7 +410,7 @@ class SessionMethods:
         }
         return self._client.call("GetAvatarToken", **params)
 
-    def get_jwt_token(self, *, authtype: Optional[str] = None, email: Optional[str] = None, password: Optional[str] = None, digest: Optional[str] = None, totpcode: Optional[str] = None) -> Any:
+    def get_jwt_token(self, *, authtype: str | None = None, email: str | None = None, password: str | None = None, digest: str | None = None, totpcode: str | None = None) -> Any:
         """Authenticates user and creates JWT token for him
 
         Authenticates user and creates JWT token for him
@@ -468,7 +468,7 @@ class SessionMethods:
         """
         return self._client.call("GetSessionInfo")
 
-    def impersonate_web_client(self, *, email: Optional[str] = None) -> Any:
+    def impersonate_web_client(self, *, email: str | None = None) -> Any:
         """Impersonate as another person and get its webclient session id
   Administrator can impersonate anyone
   Domain administrator can impersonate accounts from his domain
@@ -499,7 +499,7 @@ class SessionMethods:
         }
         return self._client.call("ImpersonateWebClient", **params)
 
-    def login_jwt_token(self, *, authtype: Optional[str] = None, email: Optional[str] = None, password: Optional[str] = None, digest: Optional[str] = None, clientident: Optional[str] = None, totpcode: Optional[str] = None) -> Any:
+    def login_jwt_token(self, *, authtype: str | None = None, email: str | None = None, password: str | None = None, digest: str | None = None, clientident: str | None = None, totpcode: str | None = None) -> Any:
         """Authenticates user and creates JWT token for him
 
         Authenticates user and creates JWT token for him
@@ -558,7 +558,7 @@ class SessionMethods:
         """
         return self._client.call("Logout")
 
-    def logout_jwt_token(self, *, token: Optional[str] = None) -> Any:
+    def logout_jwt_token(self, *, token: str | None = None) -> Any:
         """Logouts refresh and access token
 
         Logouts refresh and access token
@@ -582,7 +582,7 @@ class SessionMethods:
         }
         return self._client.call("LogoutJWTToken", **params)
 
-    def make_jwt_token_login(self, *, clientident: Optional[str] = None) -> Any:
+    def make_jwt_token_login(self, *, clientident: str | None = None) -> Any:
         """This method creates access and refresh token for user with session.
  It creates new JWT login into login table.
 
@@ -608,7 +608,7 @@ class SessionMethods:
         }
         return self._client.call("MakeJWTTokenLogin", **params)
 
-    def refresh_jwt_token(self, *, refreshtoken: Optional[str] = None) -> Any:
+    def refresh_jwt_token(self, *, refreshtoken: str | None = None) -> Any:
         """Creates access token for valid refreshtoken
 
         Creates access token for valid refreshtoken
@@ -632,7 +632,7 @@ class SessionMethods:
         }
         return self._client.call("RefreshJWTToken", **params)
 
-    def reset2_factor(self, *, email: Optional[str] = None) -> Any:
+    def reset2_factor(self, *, email: str | None = None) -> Any:
         """Resets 2 factor authorization for account given in Email parameter
 
         Resets 2 factor authorization for account given in Email parameter
@@ -659,7 +659,7 @@ class SessionMethods:
         }
         return self._client.call("Reset2Factor", **params)
 
-    def reset_my2_factor(self, *, code: Optional[str] = None) -> Any:
+    def reset_my2_factor(self, *, code: str | None = None) -> Any:
         """Resets 2 factor authorization for authenticated user
 
         Resets 2 factor authorization for authenticated user
@@ -686,7 +686,7 @@ class SessionMethods:
         }
         return self._client.call("ResetMy2Factor", **params)
 
-    def send_gateway_authentication(self, *, email: Optional[str] = None, captcharequest: Optional[Any] = None) -> Any:
+    def send_gateway_authentication(self, *, email: str | None = None, captcharequest: Any | None = None) -> Any:
         """Sends the authentication link ( with Hash ) to the email
 
         Sends the authentication link ( with Hash ) to the email

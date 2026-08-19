@@ -5,7 +5,7 @@ Typed wrappers for endpoints tagged 'Service &amp; statistics related methods' i
 
 from __future__ import annotations
 
-from typing import Any, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from ..client import IceWarpClient
@@ -14,10 +14,10 @@ if TYPE_CHECKING:
 class ServiceStatisticsMethods:
     """Typed wrappers for endpoints tagged 'Service &amp; statistics related methods'."""
 
-    def __init__(self, client: "IceWarpClient") -> None:
+    def __init__(self, client: IceWarpClient) -> None:
         self._client = client
 
-    def get_service_statistics(self, *, stype: Optional[str] = None) -> Any:
+    def get_service_statistics(self, *, stype: str | None = None) -> Any:
         """Get the statistics for specified IceWarp service
 
         Get the statistics for specified IceWarp service
@@ -44,7 +44,7 @@ class ServiceStatisticsMethods:
         }
         return self._client.call("GetServiceStatistics", **params)
 
-    def get_services_info_list(self, *, filter: Optional[Any] = None, offset: Optional[int] = None, count: Optional[int] = None) -> Any:
+    def get_services_info_list(self, *, filter: Any | None = None, offset: int | None = None, count: int | None = None) -> Any:
         """Gets the info list of IceWarp services
 
         Gets the info list of IceWarp services
@@ -77,7 +77,7 @@ class ServiceStatisticsMethods:
         }
         return self._client.call("GetServicesInfoList", **params)
 
-    def get_statistics_properties(self, *, statisticspropertylist: Optional[Any] = None) -> Any:
+    def get_statistics_properties(self, *, statisticspropertylist: Any | None = None) -> Any:
         """Gets server statistic properties
 
         Gets server statistic properties
@@ -104,7 +104,7 @@ class ServiceStatisticsMethods:
         }
         return self._client.call("GetStatisticsProperties", **params)
 
-    def get_traffic_charts(self, *, stype: Optional[str] = None, charttype: Optional[str] = None, count: Optional[int] = None, period: Optional[str] = None, ffrom: Optional[str] = None, fto: Optional[str] = None) -> Any:
+    def get_traffic_charts(self, *, stype: str | None = None, charttype: str | None = None, count: int | None = None, period: str | None = None, ffrom: str | None = None, fto: str | None = None) -> Any:
         """Gets the traffic chart data for specified IceWarp service
 
         Gets the traffic chart data for specified IceWarp service
@@ -146,7 +146,7 @@ class ServiceStatisticsMethods:
         }
         return self._client.call("GetTrafficCharts", **params)
 
-    def is_service_running(self, *, service: Optional[str] = None) -> Any:
+    def is_service_running(self, *, service: str | None = None) -> Any:
         """Check if specified IceWarp service is running or not
 
         Check if specified IceWarp service is running or not
@@ -173,7 +173,7 @@ class ServiceStatisticsMethods:
         }
         return self._client.call("IsServiceRunning", **params)
 
-    def restart_service(self, *, service: Optional[str] = None) -> Any:
+    def restart_service(self, *, service: str | None = None) -> Any:
         """Restarts the specified IceWarp service
 
         Restarts the specified IceWarp service
@@ -200,7 +200,7 @@ class ServiceStatisticsMethods:
         }
         return self._client.call("RestartService", **params)
 
-    def start_service(self, *, service: Optional[str] = None) -> Any:
+    def start_service(self, *, service: str | None = None) -> Any:
         """Starts the specified IceWarp service
 
         Starts the specified IceWarp service
@@ -227,7 +227,7 @@ class ServiceStatisticsMethods:
         }
         return self._client.call("StartService", **params)
 
-    def stop_service(self, *, service: Optional[str] = None) -> Any:
+    def stop_service(self, *, service: str | None = None) -> Any:
         """Stops the specified IceWarp service
 
         Stops the specified IceWarp service

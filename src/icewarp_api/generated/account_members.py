@@ -5,7 +5,7 @@ Typed wrappers for endpoints tagged 'Account mebers related methods' in the IceW
 
 from __future__ import annotations
 
-from typing import Any, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from ..client import IceWarpClient
@@ -14,10 +14,10 @@ if TYPE_CHECKING:
 class AccountMembersMethods:
     """Typed wrappers for endpoints tagged 'Account mebers related methods'."""
 
-    def __init__(self, client: "IceWarpClient") -> None:
+    def __init__(self, client: IceWarpClient) -> None:
         self._client = client
 
-    def get_account_member_info_list(self, *, who: Optional[str] = None, filter: Optional[Any] = None, offset: Optional[int] = None, count: Optional[int] = None) -> Any:
+    def get_account_member_info_list(self, *, who: str | None = None, filter: Any | None = None, offset: int | None = None, count: int | None = None) -> Any:
         """Get the info list of server, domain or account mobile devices
 
         Get the info list of server, domain or account mobile devices
@@ -53,7 +53,7 @@ class AccountMembersMethods:
         }
         return self._client.call("GetAccountMemberInfoList", **params)
 
-    def get_account_member_properties(self, *, who: Optional[str] = None, memberid: Optional[str] = None, accountmemberpropertylist: Optional[Any] = None) -> Any:
+    def get_account_member_properties(self, *, who: str | None = None, memberid: str | None = None, accountmemberpropertylist: Any | None = None) -> Any:
         """Gets mobile device properties
 
         Gets mobile device properties
@@ -85,7 +85,7 @@ class AccountMembersMethods:
         }
         return self._client.call("GetAccountMemberProperties", **params)
 
-    def get_admin_resources(self, *, resources: Optional[Any] = None, level: Optional[str] = None, selector: Optional[str] = None, items: Optional[Any] = None) -> Any:
+    def get_admin_resources(self, *, resources: Any | None = None, level: str | None = None, selector: str | None = None, items: Any | None = None) -> Any:
         """Gets admin setting properties
 
         Gets admin setting properties
@@ -121,7 +121,7 @@ class AccountMembersMethods:
         }
         return self._client.call("GetAdminResources", **params)
 
-    def get_webmail_resource(self, *, resource: Optional[str] = None, level: Optional[str] = None, selector: Optional[str] = None, items: Optional[Any] = None) -> Any:
+    def get_webmail_resource(self, *, resource: str | None = None, level: str | None = None, selector: str | None = None, items: Any | None = None) -> Any:
         """Deletes mobile device(s)
 
         Deletes mobile device(s)
@@ -158,7 +158,7 @@ class AccountMembersMethods:
         }
         return self._client.call("GetWebmailResource", **params)
 
-    def get_webmail_resources(self, *, resources: Optional[Any] = None, level: Optional[str] = None, selector: Optional[str] = None) -> Any:
+    def get_webmail_resources(self, *, resources: Any | None = None, level: str | None = None, selector: str | None = None) -> Any:
         """Gets webclient setting properties
 
         Gets webclient setting properties
@@ -192,7 +192,7 @@ class AccountMembersMethods:
         }
         return self._client.call("GetWebmailResources", **params)
 
-    def set_account_member_properties(self, *, who: Optional[str] = None, memberid: Optional[str] = None, propertyvaluelist: Optional[Any] = None) -> Any:
+    def set_account_member_properties(self, *, who: str | None = None, memberid: str | None = None, propertyvaluelist: Any | None = None) -> Any:
         """Sets account member properties
 
         Sets account member properties
@@ -224,7 +224,7 @@ class AccountMembersMethods:
         }
         return self._client.call("SetAccountMemberProperties", **params)
 
-    def set_admin_resources(self, *, resources: Optional[Any] = None, level: Optional[str] = None, selector: Optional[str] = None) -> Any:
+    def set_admin_resources(self, *, resources: Any | None = None, level: str | None = None, selector: str | None = None) -> Any:
         """Sets admin settings resources
 
         Sets admin settings resources
@@ -258,7 +258,7 @@ class AccountMembersMethods:
         }
         return self._client.call("SetAdminResources", **params)
 
-    def set_webmail_resources(self, *, resources: Optional[Any] = None, level: Optional[str] = None, selector: Optional[str] = None) -> Any:
+    def set_webmail_resources(self, *, resources: Any | None = None, level: str | None = None, selector: str | None = None) -> Any:
         """Sets webclient settings resources
 
         Sets webclient settings resources

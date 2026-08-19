@@ -5,7 +5,7 @@ Typed wrappers for endpoints tagged 'Certificate related methods' in the IceWarp
 
 from __future__ import annotations
 
-from typing import Any, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from ..client import IceWarpClient
@@ -14,10 +14,10 @@ if TYPE_CHECKING:
 class CertificateMethods:
     """Typed wrappers for endpoints tagged 'Certificate related methods'."""
 
-    def __init__(self, client: "IceWarpClient") -> None:
+    def __init__(self, client: IceWarpClient) -> None:
         self._client = client
 
-    def add_server_certificate(self, *, ipaddress: Optional[Any] = None, certificate: Optional[str] = None, setasdefault: Optional[str] = None) -> Any:
+    def add_server_certificate(self, *, ipaddress: Any | None = None, certificate: str | None = None, setasdefault: str | None = None) -> Any:
         """Add new server certificate (uploaded)
 
         Add new server certificate (uploaded)
@@ -50,7 +50,7 @@ class CertificateMethods:
         }
         return self._client.call("AddServerCertificate", **params)
 
-    def create_server_certificate(self, *, certificate: Optional[Any] = None, setasdefault: Optional[str] = None) -> Any:
+    def create_server_certificate(self, *, certificate: Any | None = None, setasdefault: str | None = None) -> Any:
         """Create new CSR / Server certificate
 
         Create new CSR / Server certificate
@@ -80,7 +80,7 @@ class CertificateMethods:
         }
         return self._client.call("CreateServerCertificate", **params)
 
-    def delete_server_certificate(self, *, id: Optional[str] = None) -> Any:
+    def delete_server_certificate(self, *, id: str | None = None) -> Any:
         """Deletes existing server certificate
 
         Deletes existing server certificate
@@ -107,7 +107,7 @@ class CertificateMethods:
         }
         return self._client.call("DeleteServerCertificate", **params)
 
-    def edit_server_certificate(self, *, id: Optional[str] = None, ipaddress: Optional[Any] = None, certificate: Optional[str] = None, setasdefault: Optional[str] = None) -> Any:
+    def edit_server_certificate(self, *, id: str | None = None, ipaddress: Any | None = None, certificate: str | None = None, setasdefault: str | None = None) -> Any:
         """Edits existing server certificate
 
         Edits existing server certificate
@@ -143,7 +143,7 @@ class CertificateMethods:
         }
         return self._client.call("EditServerCertificate", **params)
 
-    def export_server_certificate(self, *, id: Optional[str] = None) -> Any:
+    def export_server_certificate(self, *, id: str | None = None) -> Any:
         """Exports existing server certificate
 
         Exports existing server certificate
@@ -190,7 +190,7 @@ class CertificateMethods:
         """
         return self._client.call("GetServerCertificateList")
 
-    def reissue_server_certificate(self, *, id: Optional[str] = None, certificate: Optional[Any] = None, reuse: Optional[str] = None) -> Any:
+    def reissue_server_certificate(self, *, id: str | None = None, certificate: Any | None = None, reuse: str | None = None) -> Any:
         """Reissues existing server certificate
 
         Reissues existing server certificate
@@ -223,7 +223,7 @@ class CertificateMethods:
         }
         return self._client.call("ReissueServerCertificate", **params)
 
-    def set_default_server_certificate(self, *, id: Optional[str] = None) -> Any:
+    def set_default_server_certificate(self, *, id: str | None = None) -> Any:
         """Sets the existing server certificate as default
 
         Sets the existing server certificate as default

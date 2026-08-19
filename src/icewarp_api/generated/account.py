@@ -5,7 +5,7 @@ Typed wrappers for endpoints tagged 'Account related methods' in the IceWarp Mai
 
 from __future__ import annotations
 
-from typing import Any, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from ..client import IceWarpClient
@@ -14,10 +14,10 @@ if TYPE_CHECKING:
 class AccountMethods:
     """Typed wrappers for endpoints tagged 'Account related methods'."""
 
-    def __init__(self, client: "IceWarpClient") -> None:
+    def __init__(self, client: IceWarpClient) -> None:
         self._client = client
 
-    def add_account_members(self, *, accountemail: Optional[str] = None, members: Optional[Any] = None) -> Any:
+    def add_account_members(self, *, accountemail: str | None = None, members: Any | None = None) -> Any:
         """Adds the members to the specified IceWarp account. Available for groups and mailing lists
 
         Adds the members to the specified IceWarp account. Available for groups and mailing lists
@@ -47,7 +47,7 @@ class AccountMethods:
         }
         return self._client.call("AddAccountMembers", **params)
 
-    def add_all_account_members(self, *, accountemail: Optional[str] = None, domainstr: Optional[str] = None, filter: Optional[Any] = None) -> Any:
+    def add_all_account_members(self, *, accountemail: str | None = None, domainstr: str | None = None, filter: Any | None = None) -> Any:
         """Adds the members to the specified IceWarp account. Members are specified by IceWarp domain name and
  current account filter. Available for groups and mailing lists
 
@@ -82,7 +82,7 @@ class AccountMethods:
         }
         return self._client.call("AddAllAccountMembers", **params)
 
-    def create_account(self, *, domainstr: Optional[str] = None, accountproperties: Optional[Any] = None) -> Any:
+    def create_account(self, *, domainstr: str | None = None, accountproperties: Any | None = None) -> Any:
         """Creates an account in sepcified IceWarp domain
 
         Creates an account in sepcified IceWarp domain
@@ -112,7 +112,7 @@ class AccountMethods:
         }
         return self._client.call("CreateAccount", **params)
 
-    def delete_account_members(self, *, accountemail: Optional[str] = None, members: Optional[Any] = None) -> Any:
+    def delete_account_members(self, *, accountemail: str | None = None, members: Any | None = None) -> Any:
         """Deletes the members from the specified IceWarp account. Available for groups and mailing lists
 
         Deletes the members from the specified IceWarp account. Available for groups and mailing lists
@@ -142,7 +142,7 @@ class AccountMethods:
         }
         return self._client.call("DeleteAccountMembers", **params)
 
-    def delete_accounts(self, *, domainstr: Optional[str] = None, accountlist: Optional[Any] = None, leavedata: Optional[str] = None) -> Any:
+    def delete_accounts(self, *, domainstr: str | None = None, accountlist: Any | None = None, leavedata: str | None = None) -> Any:
         """Deletes the list of accounts in sepcified IceWarp domain
 
         Deletes the list of accounts in sepcified IceWarp domain
@@ -175,7 +175,7 @@ class AccountMethods:
         }
         return self._client.call("DeleteAccounts", **params)
 
-    def delete_all_account_members(self, *, accountemail: Optional[str] = None, filter: Optional[Any] = None) -> Any:
+    def delete_all_account_members(self, *, accountemail: str | None = None, filter: Any | None = None) -> Any:
         """Deletes all members from the IceWarp account. Available for groups and mailing lists
 
         Deletes all members from the IceWarp account. Available for groups and mailing lists
@@ -205,7 +205,7 @@ class AccountMethods:
         }
         return self._client.call("DeleteAllAccountMembers", **params)
 
-    def delete_all_accounts(self, *, domainstr: Optional[str] = None, filter: Optional[Any] = None) -> Any:
+    def delete_all_accounts(self, *, domainstr: str | None = None, filter: Any | None = None) -> Any:
         """Deletes all accounts that matches current filter in sepcified IceWarp domain
 
         Deletes all accounts that matches current filter in sepcified IceWarp domain
@@ -235,7 +235,7 @@ class AccountMethods:
         }
         return self._client.call("DeleteAllAccounts", **params)
 
-    def edit_account_members(self, *, accountemail: Optional[str] = None, members: Optional[Any] = None) -> Any:
+    def edit_account_members(self, *, accountemail: str | None = None, members: Any | None = None) -> Any:
         """Edits the members of the specified IceWarp account. Available for groups and mailing lists
 
         Edits the members of the specified IceWarp account. Available for groups and mailing lists
@@ -265,7 +265,7 @@ class AccountMethods:
         }
         return self._client.call("EditAccountMembers", **params)
 
-    def edit_all_account_members_rights(self, *, accountemail: Optional[str] = None, rights: Optional[Any] = None) -> Any:
+    def edit_all_account_members_rights(self, *, accountemail: str | None = None, rights: Any | None = None) -> Any:
         """Edits the rights for all members of the specified IceWarp account. Available for groups and mailing lists
 
         Edits the rights for all members of the specified IceWarp account. Available for groups and mailing lists
@@ -295,7 +295,7 @@ class AccountMethods:
         }
         return self._client.call("EditAllAccountMembersRights", **params)
 
-    def expire_account_password(self, *, accountemail: Optional[str] = None, disablenotification: Optional[str] = None) -> Any:
+    def expire_account_password(self, *, accountemail: str | None = None, disablenotification: str | None = None) -> Any:
         """Expires the current password of existing IceWarp account
 
         Expires the current password of existing IceWarp account
@@ -325,7 +325,7 @@ class AccountMethods:
         }
         return self._client.call("ExpireAccountPassword", **params)
 
-    def generate_account_activation_key(self, *, accountemail: Optional[str] = None, keytype: Optional[str] = None, description: Optional[str] = None, count: Optional[str] = None) -> Any:
+    def generate_account_activation_key(self, *, accountemail: str | None = None, keytype: str | None = None, description: str | None = None, count: str | None = None) -> Any:
         """Generates activation key for IceWarp account
 
         Generates activation key for IceWarp account
@@ -381,7 +381,7 @@ class AccountMethods:
         """
         return self._client.call("GenerateAccountPassword")
 
-    def get_account_administrative_permissions(self, *, accountemail: Optional[str] = None) -> Any:
+    def get_account_administrative_permissions(self, *, accountemail: str | None = None) -> Any:
         """Inherits the permissions of specified folder from higher level
 
         Inherits the permissions of specified folder from higher level
@@ -409,7 +409,7 @@ class AccountMethods:
         }
         return self._client.call("GetAccountAdministrativePermissions", **params)
 
-    def get_account_api_console(self, *, accountemail: Optional[str] = None, filter: Optional[Any] = None, offset: Optional[int] = None, count: Optional[int] = None, comments: Optional[str] = None) -> Any:
+    def get_account_api_console(self, *, accountemail: str | None = None, filter: Any | None = None, offset: int | None = None, count: int | None = None, comments: str | None = None) -> Any:
         """Gets the list of account api variables, its values, data types and rights
 
         Gets the list of account api variables, its values, data types and rights
@@ -448,7 +448,7 @@ class AccountMethods:
         }
         return self._client.call("GetAccountAPIConsole", **params)
 
-    def get_account_folder_list(self, *, accountemail: Optional[str] = None, onlydefault: Optional[str] = None) -> Any:
+    def get_account_folder_list(self, *, accountemail: str | None = None, onlydefault: str | None = None) -> Any:
         """Gets the list of IMAP and GroupWare folders in specified IceWarp account
 
         Gets the list of IMAP and GroupWare folders in specified IceWarp account
@@ -478,7 +478,7 @@ class AccountMethods:
         }
         return self._client.call("GetAccountFolderList", **params)
 
-    def get_account_folder_permissions(self, *, accountemail: Optional[str] = None, folderid: Optional[str] = None) -> Any:
+    def get_account_folder_permissions(self, *, accountemail: str | None = None, folderid: str | None = None) -> Any:
         """Gets the permission list for the folder specified by account email and folderid
 
         Gets the permission list for the folder specified by account email and folderid
@@ -508,7 +508,7 @@ class AccountMethods:
         }
         return self._client.call("GetAccountFolderPermissions", **params)
 
-    def get_account_properties(self, *, accountemail: Optional[str] = None, accountpropertylist: Optional[Any] = None, accountpropertyset: Optional[str] = None) -> Any:
+    def get_account_properties(self, *, accountemail: str | None = None, accountpropertylist: Any | None = None, accountpropertyset: str | None = None) -> Any:
         """Gets the properties of the existing IceWarp account
 
         Gets the properties of the existing IceWarp account
@@ -541,7 +541,7 @@ class AccountMethods:
         }
         return self._client.call("GetAccountProperties", **params)
 
-    def get_accounts_info_list(self, *, domainstr: Optional[str] = None, filter: Optional[Any] = None, offset: Optional[int] = None, count: Optional[int] = None) -> Any:
+    def get_accounts_info_list(self, *, domainstr: str | None = None, filter: Any | None = None, offset: int | None = None, count: int | None = None) -> Any:
         """Get the list of informations about accounts in sepcified IceWarp domain
 
         Get the list of informations about accounts in sepcified IceWarp domain
@@ -577,7 +577,7 @@ class AccountMethods:
         }
         return self._client.call("GetAccountsInfoList", **params)
 
-    def get_my_properties(self, *, accountpropertylist: Optional[Any] = None) -> Any:
+    def get_my_properties(self, *, accountpropertylist: Any | None = None) -> Any:
         """Gets the properties of the existing IceWarp account  ( limited to logged on user )
 
         Gets the properties of the existing IceWarp account  ( limited to logged on user )
@@ -604,7 +604,7 @@ class AccountMethods:
         }
         return self._client.call("GetMyProperties", **params)
 
-    def inherit_account_folder_permissions(self, *, accountemail: Optional[str] = None, folderid: Optional[str] = None) -> Any:
+    def inherit_account_folder_permissions(self, *, accountemail: str | None = None, folderid: str | None = None) -> Any:
         """Inherits the permissions of specified folder from higher level
 
         Inherits the permissions of specified folder from higher level
@@ -634,7 +634,7 @@ class AccountMethods:
         }
         return self._client.call("InheritAccountFolderPermissions", **params)
 
-    def move_account_to_domain(self, *, accountlist: Optional[Any] = None, destdomain: Optional[str] = None) -> Any:
+    def move_account_to_domain(self, *, accountlist: Any | None = None, destdomain: str | None = None) -> Any:
         """Move specified accounts to other domain
 
         Move specified accounts to other domain
@@ -664,7 +664,7 @@ class AccountMethods:
         }
         return self._client.call("MoveAccountToDomain", **params)
 
-    def send_account_activation_key(self, *, accountemail: Optional[str] = None, keytype: Optional[str] = None, description: Optional[str] = None, count: Optional[str] = None) -> Any:
+    def send_account_activation_key(self, *, accountemail: str | None = None, keytype: str | None = None, description: str | None = None, count: str | None = None) -> Any:
         """Sends the activation key for IceWarp account
 
         Sends the activation key for IceWarp account
@@ -700,7 +700,7 @@ class AccountMethods:
         }
         return self._client.call("SendAccountActivationKey", **params)
 
-    def set_account_folder_permissions(self, *, accountemail: Optional[str] = None, folderid: Optional[str] = None, permissions: Optional[Any] = None) -> Any:
+    def set_account_folder_permissions(self, *, accountemail: str | None = None, folderid: str | None = None, permissions: Any | None = None) -> Any:
         """Sets the list of permissions for specified folder in existing IceWarp account
 
         Sets the list of permissions for specified folder in existing IceWarp account
@@ -733,7 +733,7 @@ class AccountMethods:
         }
         return self._client.call("SetAccountFolderPermissions", **params)
 
-    def set_account_password(self, *, accountemail: Optional[str] = None, authtype: Optional[str] = None, password: Optional[str] = None, digest: Optional[str] = None, ignorepolicy: Optional[str] = None) -> Any:
+    def set_account_password(self, *, accountemail: str | None = None, authtype: str | None = None, password: str | None = None, digest: str | None = None, ignorepolicy: str | None = None) -> Any:
         """Changes the password of existing IceWarp account
 
         Changes the password of existing IceWarp account
@@ -772,7 +772,7 @@ class AccountMethods:
         }
         return self._client.call("SetAccountPassword", **params)
 
-    def set_account_properties(self, *, accountemail: Optional[str] = None, propertyvaluelist: Optional[Any] = None) -> Any:
+    def set_account_properties(self, *, accountemail: str | None = None, propertyvaluelist: Any | None = None) -> Any:
         """Sets the properties of the existing IceWarp account
 
         Sets the properties of the existing IceWarp account
@@ -803,7 +803,7 @@ class AccountMethods:
         }
         return self._client.call("SetAccountProperties", **params)
 
-    def set_my_properties(self, *, propertyvaluelist: Optional[Any] = None) -> Any:
+    def set_my_properties(self, *, propertyvaluelist: Any | None = None) -> Any:
         """Sets the properties of the existing IceWarp account ( limited to logged on user )
 
         Sets the properties of the existing IceWarp account ( limited to logged on user )

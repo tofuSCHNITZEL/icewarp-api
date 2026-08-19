@@ -27,9 +27,8 @@ from __future__ import annotations
 import json
 import keyword
 import re
-import textwrap
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
 ROOT = Path(__file__).resolve().parent.parent
 API_DOC = ROOT / "API_doc.json"
@@ -37,7 +36,7 @@ OUT_DIR = ROOT / "src" / "icewarp_api" / "generated"
 RAW_API_FILE = OUT_DIR / "raw_api.py"
 
 # tag (as it appears in API_doc.json) -> (module_name, class_name, facade_attribute)
-TAG_INFO: Dict[str, tuple] = {
+TAG_INFO: dict[str, tuple] = {
     "Session related methods": ("session_methods", "SessionMethods", "sessions"),
     "OAuth related methods": ("oauth", "OauthMethods", "oauth"),
     "Account related methods": ("account", "AccountMethods", "accounts"),
@@ -55,7 +54,11 @@ TAG_INFO: Dict[str, tuple] = {
         "ServiceStatisticsMethods",
         "service",
     ),
-    "Certificate related methods": ("certificate", "CertificateMethods", "certificates"),
+    "Certificate related methods": (
+        "certificate",
+        "CertificateMethods",
+        "certificates",
+    ),
     "Spam queues related methods": ("spam_queues", "SpamQueuesMethods", "spam_queues"),
     "Server related methods": ("server", "ServerMethods", "server"),
     "SmartDiscover related methods": (
@@ -75,7 +78,7 @@ Typed wrappers for endpoints tagged {tag!r} in the IceWarp Maintenance API.
 
 from __future__ import annotations
 
-from typing import Any, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from ..client import IceWarpClient
@@ -84,7 +87,7 @@ if TYPE_CHECKING:
 class {class_name}:
     """Typed wrappers for endpoints tagged {tag!r}."""
 
-    def __init__(self, client: "IceWarpClient") -> None:
+    def __init__(self, client: IceWarpClient) -> None:
         self._client = client
 '''
 
@@ -103,7 +106,7 @@ def safe_identifier(name: str) -> str:
     return name
 
 
-def load_endpoints() -> List[Dict[str, Any]]:
+def load_endpoints() -> list[dict[str, Any]]:
     data = json.loads(API_DOC.read_text(encoding="utf-8"))
     schemas = data["components"]["schemas"]
     endpoints = []
@@ -115,9 +118,13 @@ def load_endpoints() -> List[Dict[str, Any]]:
         summary = (detail.get("summary") or "").strip()
         description = (detail.get("description") or "").strip()
 
-        schema_ref = detail["requestBody"]["content"]["application/xml"]["schema"]["$ref"]
+        schema_ref = detail["requestBody"]["content"]["application/xml"]["schema"][
+            "$ref"
+        ]
         schema = schemas[schema_ref.split("/")[-1]]
-        commandparams = schema["properties"]["query"]["properties"].get("commandparams") or {}
+        commandparams = (
+            schema["properties"]["query"]["properties"].get("commandparams") or {}
+        )
 
         params = []
         for name, sub in (commandparams.get("properties") or {}).items():
@@ -137,8 +144,8 @@ def load_endpoints() -> List[Dict[str, Any]]:
     return endpoints
 
 
-def build_doc_lines(ep: Dict[str, Any]) -> List[str]:
-    lines: List[str] = []
+def build_doc_lines(ep: dict[str, Any]) -> list[str]:
+    lines: list[str] = []
     lines.append(ep["summary"] or f"Calls the {ep['command_name']} endpoint.")
 
     description = ep["description"]
@@ -154,7 +161,9 @@ def build_doc_lines(ep: Dict[str, Any]) -> List[str]:
         lines.append("")
         lines.append("Args:")
         for p in ep["params"]:
-            lines.append(f"    {safe_identifier(p['name'])}: Maps to the ``{p['name']}`` request parameter.")
+            lines.append(
+                f"    {safe_identifier(p['name'])}: Maps to the ``{p['name']}`` request parameter."
+            )
 
     lines.append("")
     lines.append("Returns:")
@@ -171,7 +180,7 @@ def build_doc_lines(ep: Dict[str, Any]) -> List[str]:
     return [line.replace('"""', "'''") for line in lines]
 
 
-def render_method(ep: Dict[str, Any]) -> str:
+def render_method(ep: dict[str, Any]) -> str:
     args = ["self"]
     if ep["params"]:
         args.append("*")
@@ -179,7 +188,7 @@ def render_method(ep: Dict[str, Any]) -> str:
     for p in ep["params"]:
         ident = safe_identifier(p["name"])
         py_type = PY_TYPE.get(p["type"], "Any")
-        args.append(f"{ident}: Optional[{py_type}] = None")
+        args.append(f"{ident}: {py_type} | None = None")
         param_dict_lines.append(f'            "{p["name"]}": {ident},')
 
     signature = ", ".join(args)
@@ -196,7 +205,9 @@ def render_method(ep: Dict[str, Any]) -> str:
         out.append("        params = {")
         out.extend(param_dict_lines)
         out.append("        }")
-        out.append(f'        return self._client.call("{ep["command_name"]}", **params)')
+        out.append(
+            f'        return self._client.call("{ep["command_name"]}", **params)'
+        )
     else:
         out.append(f'        return self._client.call("{ep["command_name"]}")')
 
@@ -204,15 +215,17 @@ def render_method(ep: Dict[str, Any]) -> str:
     return "\n".join(out)
 
 
-def generate_modules(endpoints: List[Dict[str, Any]]) -> Dict[str, tuple]:
+def generate_modules(endpoints: list[dict[str, Any]]) -> dict[str, tuple]:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    by_tag: Dict[str, List[Dict[str, Any]]] = {}
+    by_tag: dict[str, list[dict[str, Any]]] = {}
     for ep in endpoints:
         by_tag.setdefault(ep["tag"], []).append(ep)
 
     unknown_tags = set(by_tag) - set(TAG_INFO)
     if unknown_tags:
-        raise SystemExit(f"Unknown tag(s) in API_doc.json, update TAG_INFO: {unknown_tags}")
+        raise SystemExit(
+            f"Unknown tag(s) in API_doc.json, update TAG_INFO: {unknown_tags}"
+        )
 
     for tag, module_name, class_name, _attr in [
         (tag, *info) for tag, info in TAG_INFO.items()
@@ -224,30 +237,44 @@ def generate_modules(endpoints: List[Dict[str, Any]]) -> Dict[str, tuple]:
             content += "\n".join(render_method(ep) for ep in eps)
         else:
             content += "\n"
-        (OUT_DIR / f"{module_name}.py").write_text(content, encoding="utf-8", newline="\n")
+        (OUT_DIR / f"{module_name}.py").write_text(
+            content, encoding="utf-8", newline="\n"
+        )
 
-    init_lines = ['"""Auto-generated package: typed wrapper classes per API category."""', ""]
-    for tag, (module_name, class_name, _attr) in TAG_INFO.items():
+    sorted_tag_info = sorted(TAG_INFO.items(), key=lambda item: item[1][0])
+    init_lines = [
+        '"""Auto-generated package: typed wrapper classes per API category."""',
+        "",
+    ]
+    for _tag, (module_name, class_name, _attr) in sorted_tag_info:
         init_lines.append(f"from .{module_name} import {class_name}")
-    init_lines.append("from .raw_api import IceWarpRawAPI")
     init_lines.append("")
     init_lines.append("__all__ = [")
-    for _tag, (_module_name, class_name, _attr) in TAG_INFO.items():
+    for _module_name, class_name, _attr in sorted(
+        (info for _tag, info in sorted_tag_info), key=lambda info: info[1].lower()
+    ):
         init_lines.append(f'    "{class_name}",')
-    init_lines.append('    "IceWarpRawAPI",')
     init_lines.append("]")
-    (OUT_DIR / "__init__.py").write_text("\n".join(init_lines) + "\n", encoding="utf-8", newline="\n")
+    (OUT_DIR / "__init__.py").write_text(
+        "\n".join(init_lines) + "\n", encoding="utf-8", newline="\n"
+    )
 
     return TAG_INFO
 
 
-def generate_raw_api(tag_info: Dict[str, tuple]) -> None:
+def generate_raw_api(tag_info: dict[str, tuple]) -> None:
     lines = []
-    lines.append('"""Auto-generated by scripts/generate_client.py - do not edit by hand.')
+    lines.append(
+        '"""Auto-generated by scripts/generate_client.py - do not edit by hand.'
+    )
     lines.append("")
-    lines.append("``IceWarpRawAPI`` (exposed as ``IceWarpAPI.iw``, see ``src/icewarp_api/api.py``)")
+    lines.append(
+        "``IceWarpRawAPI`` (exposed as ``IceWarpAPI.iw``, see ``src/icewarp_api/api.py``)"
+    )
     lines.append("holds every raw, generated, 1:1 endpoint wrapper (``.iw.domains``,")
-    lines.append("``.iw.accounts``, ..., plus the generic ``.iw.call()`` escape hatch) - see")
+    lines.append(
+        "``.iw.accounts``, ..., plus the generic ``.iw.call()`` escape hatch) - see"
+    )
     lines.append("the sibling modules in this package for the underlying methods.")
     lines.append('"""')
     lines.append("")
@@ -256,32 +283,50 @@ def generate_raw_api(tag_info: Dict[str, tuple]) -> None:
     lines.append("from typing import Any")
     lines.append("")
     lines.append("from ..client import IceWarpClient")
-    for _tag, (module_name, class_name, _attr) in tag_info.items():
+    for module_name, class_name, _attr in sorted(
+        tag_info.values(), key=lambda info: info[0].lower()
+    ):
         lines.append(f"from .{module_name} import {class_name}")
     lines.append("")
     lines.append("")
     lines.append("class IceWarpRawAPI:")
-    lines.append('    """Raw, generated, 1:1 access to every documented IceWarp API endpoint.')
+    lines.append(
+        '    """Raw, generated, 1:1 access to every documented IceWarp API endpoint.'
+    )
     lines.append("")
-    lines.append("    Exposed as ``IceWarpAPI.iw``. Every attribute here is either a typed")
-    lines.append("    wrapper class generated from ``API_doc.json`` (grouped by category) or")
-    lines.append("    the generic :meth:`call` escape hatch - nothing here is hand-curated:")
+    lines.append(
+        "    Exposed as ``IceWarpAPI.iw``. Every attribute here is either a typed"
+    )
+    lines.append(
+        "    wrapper class generated from ``API_doc.json`` (grouped by category) or"
+    )
+    lines.append(
+        "    the generic :meth:`call` escape hatch - nothing here is hand-curated:"
+    )
     lines.append("")
-    for _tag, (_module_name, class_name, attr) in tag_info.items():
-        lines.append(f"    * ``.{attr}`` - :class:`~icewarp_api.generated.{_module_name}.{class_name}`")
+    for _module_name, class_name, attr in tag_info.values():
+        lines.append(
+            f"    * ``.{attr}`` - :class:`~icewarp_api.generated.{_module_name}.{class_name}`"
+        )
     lines.append('    """')
     lines.append("")
     lines.append("    def __init__(self, client: IceWarpClient) -> None:")
     lines.append("        self._client = client")
-    for _tag, (_module_name, class_name, attr) in tag_info.items():
+    for _module_name, class_name, attr in tag_info.values():
         lines.append(f"        self.{attr} = {class_name}(client)")
     lines.append("")
     lines.append("    def call(self, command_name: str, **params: Any) -> Any:")
-    lines.append('        """Call any of the 174 documented endpoints directly by command name.')
+    lines.append(
+        '        """Call any of the 174 documented endpoints directly by command name.'
+    )
     lines.append("")
-    lines.append("        Useful as an escape hatch for endpoints where you prefer not to use")
-    lines.append("        the typed wrapper, or for calling new endpoints before this library")
-    lines.append('        has been regenerated against an updated API_doc.json.')
+    lines.append(
+        "        Useful as an escape hatch for endpoints where you prefer not to use"
+    )
+    lines.append(
+        "        the typed wrapper, or for calling new endpoints before this library"
+    )
+    lines.append("        has been regenerated against an updated API_doc.json.")
     lines.append('        """')
     lines.append("        return self._client.call(command_name, **params)")
     lines.append("")
@@ -296,9 +341,10 @@ def main() -> None:
     generate_raw_api(tag_info)
     print(f"Generated {len(tag_info)} category modules in {OUT_DIR}")
     print(f"Generated raw API facade: {RAW_API_FILE}")
-    print("Note: src/icewarp_api/api.py (IceWarpAPI) is hand-written and was NOT touched.")
+    print(
+        "Note: src/icewarp_api/api.py (IceWarpAPI) is hand-written and was NOT touched."
+    )
 
 
 if __name__ == "__main__":
     main()
-

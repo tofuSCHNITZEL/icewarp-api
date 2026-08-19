@@ -5,7 +5,7 @@ Typed wrappers for endpoints tagged 'SmartDiscover related methods' in the IceWa
 
 from __future__ import annotations
 
-from typing import Any, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from ..client import IceWarpClient
@@ -14,10 +14,10 @@ if TYPE_CHECKING:
 class SmartDiscoverMethods:
     """Typed wrappers for endpoints tagged 'SmartDiscover related methods'."""
 
-    def __init__(self, client: "IceWarpClient") -> None:
+    def __init__(self, client: IceWarpClient) -> None:
         self._client = client
 
-    def set_smart_discover_hostname(self, *, hostname: Optional[str] = None) -> Any:
+    def set_smart_discover_hostname(self, *, hostname: str | None = None) -> Any:
         """Sets new domain(host) value to all smartdiscover variables
 
         Sets new domain(host) value to all smartdiscover variables

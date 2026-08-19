@@ -5,7 +5,7 @@ Typed wrappers for endpoints tagged 'OAuth related methods' in the IceWarp Maint
 
 from __future__ import annotations
 
-from typing import Any, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from ..client import IceWarpClient
@@ -14,10 +14,10 @@ if TYPE_CHECKING:
 class OauthMethods:
     """Typed wrappers for endpoints tagged 'OAuth related methods'."""
 
-    def __init__(self, client: "IceWarpClient") -> None:
+    def __init__(self, client: IceWarpClient) -> None:
         self._client = client
 
-    def add_oauth_client(self, *, client: Optional[Any] = None) -> Any:
+    def add_oauth_client(self, *, client: Any | None = None) -> Any:
         """Register new OAuth client
 
         Register new OAuth client
@@ -43,7 +43,7 @@ class OauthMethods:
         }
         return self._client.call("AddOauthClient", **params)
 
-    def add_oauth_client_with_id(self, *, client: Optional[Any] = None) -> Any:
+    def add_oauth_client_with_id(self, *, client: Any | None = None) -> Any:
         """Represents function <span class="dcword">TAPISession.AddOauthClientWithId</span>
 
         Represents function <span class="dcword">TAPISession.AddOauthClientWithId</span>
@@ -67,7 +67,7 @@ class OauthMethods:
         }
         return self._client.call("AddOauthClientWithId", **params)
 
-    def authorized_to_im_query(self, *, accountemail: Optional[str] = None) -> Any:
+    def authorized_to_im_query(self, *, accountemail: str | None = None) -> Any:
         """Represents function <span class="dcword">TAPISession.AuthorizedToIMQuery</span>
 
         Represents function <span class="dcword">TAPISession.AuthorizedToIMQuery</span>
@@ -91,7 +91,7 @@ class OauthMethods:
         }
         return self._client.call("AuthorizedToIMQuery", **params)
 
-    def create_oauth_signed_token(self, *, payload: Optional[str] = None) -> Any:
+    def create_oauth_signed_token(self, *, payload: str | None = None) -> Any:
         """Not published
 
         Not published
@@ -115,7 +115,7 @@ class OauthMethods:
         }
         return self._client.call("CreateOAuthSignedToken", **params)
 
-    def edit_oauth_client(self, *, client: Optional[Any] = None) -> Any:
+    def edit_oauth_client(self, *, client: Any | None = None) -> Any:
         """Allows edit informations about registered OAuth client
 
         Allows edit informations about registered OAuth client
@@ -160,7 +160,7 @@ class OauthMethods:
         """
         return self._client.call("GetActualEmail")
 
-    def get_dns_zone_file(self, *, domain: Optional[str] = None) -> Any:
+    def get_dns_zone_file(self, *, domain: str | None = None) -> Any:
         """Returns DNS zone file as base64 encoded string
 
         Returns DNS zone file as base64 encoded string
@@ -186,7 +186,7 @@ class OauthMethods:
         }
         return self._client.call("GetDNSZoneFile", **params)
 
-    def get_oauth_access_code(self, *, accesscodevalue: Optional[str] = None) -> Any:
+    def get_oauth_access_code(self, *, accesscodevalue: str | None = None) -> Any:
         """It gets informations about access code.
 
         It gets informations about access code.
@@ -212,7 +212,7 @@ class OauthMethods:
         }
         return self._client.call("GetOauthAccessCode", **params)
 
-    def get_oauth_authorization_request(self, *, requestid: Optional[str] = None) -> Any:
+    def get_oauth_authorization_request(self, *, requestid: str | None = None) -> Any:
         """It gets informations about authorization request.
 
         It gets informations about authorization request.
@@ -278,7 +278,7 @@ class OauthMethods:
         """
         return self._client.call("GetOauthAuthorizations")
 
-    def get_oauth_client_info(self, *, clientid: Optional[str] = None) -> Any:
+    def get_oauth_client_info(self, *, clientid: str | None = None) -> Any:
         """Returns informations about registered OAuth client
 
         Returns informations about registered OAuth client
@@ -304,7 +304,7 @@ class OauthMethods:
         }
         return self._client.call("GetOauthClientInfo", **params)
 
-    def get_oauth_client_registration(self, *, clientid: Optional[str] = None) -> Any:
+    def get_oauth_client_registration(self, *, clientid: str | None = None) -> Any:
         """Represents function <span class="dcword">TAPISession.GetOauthClientRegistration</span>
 
         Represents function <span class="dcword">TAPISession.GetOauthClientRegistration</span>
@@ -348,7 +348,7 @@ class OauthMethods:
         """
         return self._client.call("GetOauthClients")
 
-    def get_oauth_refresh_token(self, *, refreshtokenvalue: Optional[str] = None) -> Any:
+    def get_oauth_refresh_token(self, *, refreshtokenvalue: str | None = None) -> Any:
         """It gets informations about refresh token.
 
         It gets informations about refresh token.
@@ -430,7 +430,7 @@ class OauthMethods:
         """
         return self._client.call("GetRestrictIPList")
 
-    def grant_oauth_authorization(self, *, requestid: Optional[str] = None, description: Optional[str] = None) -> Any:
+    def grant_oauth_authorization(self, *, requestid: str | None = None, description: str | None = None) -> Any:
         """Logged user grants authorization to authorization request.
 
         Logged user grants authorization to authorization request.
@@ -458,7 +458,7 @@ class OauthMethods:
         }
         return self._client.call("GrantOauthAuthorization", **params)
 
-    def oauth_authorization_exists(self, *, requestid: Optional[str] = None) -> Any:
+    def oauth_authorization_exists(self, *, requestid: str | None = None) -> Any:
         """It checks if logged user already granted authorization to client in the past.
  If authorization is granted than authorization request is paired with already existing grant.
 
@@ -486,7 +486,7 @@ class OauthMethods:
         }
         return self._client.call("OauthAuthorizationExists", **params)
 
-    def oauth_verify_secret(self, *, clientid: Optional[str] = None, secret: Optional[str] = None) -> Any:
+    def oauth_verify_secret(self, *, clientid: str | None = None, secret: str | None = None) -> Any:
         """Returns informations about registered OAuth client only if matches secret
 
         Returns informations about registered OAuth client only if matches secret
@@ -514,7 +514,7 @@ class OauthMethods:
         }
         return self._client.call("OauthVerifySecret", **params)
 
-    def remove_oauth_authorization(self, *, authorizationid: Optional[int] = None) -> Any:
+    def remove_oauth_authorization(self, *, authorizationid: int | None = None) -> Any:
         """It removes authorization.
 
         It removes authorization.
@@ -540,7 +540,7 @@ class OauthMethods:
         }
         return self._client.call("RemoveOauthAuthorization", **params)
 
-    def remove_oauth_client(self, *, clientid: Optional[str] = None) -> Any:
+    def remove_oauth_client(self, *, clientid: str | None = None) -> Any:
         """Removes OAuth client with all authorizations and tokens
 
         Removes OAuth client with all authorizations and tokens
@@ -566,7 +566,7 @@ class OauthMethods:
         }
         return self._client.call("RemoveOauthClient", **params)
 
-    def replace_oauth_access_token(self, *, refreshtoken: Optional[Any] = None, accesstoken: Optional[Any] = None) -> Any:
+    def replace_oauth_access_token(self, *, refreshtoken: Any | None = None, accesstoken: Any | None = None) -> Any:
         """It replaces access token with new one generated by refresh token. Old access token is deleted even if it is not expired.
 
         It replaces access token with new one generated by refresh token. Old access token is deleted even if it is not expired.
@@ -594,7 +594,7 @@ class OauthMethods:
         }
         return self._client.call("ReplaceOauthAccessToken", **params)
 
-    def save_oauth_access_code(self, *, requestid: Optional[str] = None, accesscode: Optional[Any] = None) -> Any:
+    def save_oauth_access_code(self, *, requestid: str | None = None, accesscode: Any | None = None) -> Any:
         """It stores generated access code to the authorization request.
 
         It stores generated access code to the authorization request.
@@ -622,7 +622,7 @@ class OauthMethods:
         }
         return self._client.call("SaveOauthAccessCode", **params)
 
-    def save_oauth_tokens(self, *, accesscodevalue: Optional[str] = None, refreshtoken: Optional[Any] = None, accesstoken: Optional[Any] = None) -> Any:
+    def save_oauth_tokens(self, *, accesscodevalue: str | None = None, refreshtoken: Any | None = None, accesstoken: Any | None = None) -> Any:
         """It finishes authorization sequesnce and stores generated tokens.
 
         It finishes authorization sequesnce and stores generated tokens.
@@ -652,7 +652,7 @@ class OauthMethods:
         }
         return self._client.call("SaveOauthTokens", **params)
 
-    def set_restrict_ip_list(self, *, restrictiplist: Optional[Any] = None) -> Any:
+    def set_restrict_ip_list(self, *, restrictiplist: Any | None = None) -> Any:
         """Represents function <span class="dcword">TAPISession.SetRestrictIPList</span>
 
         Represents function <span class="dcword">TAPISession.SetRestrictIPList</span>
@@ -676,7 +676,7 @@ class OauthMethods:
         }
         return self._client.call("SetRestrictIPList", **params)
 
-    def start_oauth_authorization_request(self, *, request: Optional[Any] = None) -> Any:
+    def start_oauth_authorization_request(self, *, request: Any | None = None) -> Any:
         """Begins application authorization to access to user data.
 
         Begins application authorization to access to user data.
@@ -702,7 +702,7 @@ class OauthMethods:
         }
         return self._client.call("StartOauthAuthorizationRequest", **params)
 
-    def verify_certificate_chain(self, *, certificate: Optional[str] = None) -> Any:
+    def verify_certificate_chain(self, *, certificate: str | None = None) -> Any:
         """Checks if base64 encode PEM certificate passed as parameter has all intermediate certificates and is not self-signed
 
         Checks if base64 encode PEM certificate passed as parameter has all intermediate certificates and is not self-signed
@@ -728,7 +728,7 @@ class OauthMethods:
         }
         return self._client.call("VerifyCertificateChain", **params)
 
-    def verify_jwt_token(self, *, token: Optional[str] = None) -> Any:
+    def verify_jwt_token(self, *, token: str | None = None) -> Any:
         """It verifies token signature, validity and expiration.
 
         It verifies token signature, validity and expiration.
@@ -754,7 +754,7 @@ class OauthMethods:
         }
         return self._client.call("VerifyJWTToken", **params)
 
-    def verify_oauth_token_signature(self, *, jwttoken: Optional[str] = None) -> Any:
+    def verify_oauth_token_signature(self, *, jwttoken: str | None = None) -> Any:
         """Represents function <span class="dcword">TAPISession.VerifyOAuthTokenSignature</span>
 
         Represents function <span class="dcword">TAPISession.VerifyOAuthTokenSignature</span>

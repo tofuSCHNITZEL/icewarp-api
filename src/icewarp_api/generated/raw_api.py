@@ -11,20 +11,20 @@ from __future__ import annotations
 from typing import Any
 
 from ..client import IceWarpClient
-from .session_methods import SessionMethods
-from .oauth import OauthMethods
 from .account import AccountMethods
-from .signup import SignupMethods
-from .rule import RuleMethods
-from .domain import DomainMethods
-from .device import DeviceMethods
 from .account_members import AccountMembersMethods
-from .service_statistics import ServiceStatisticsMethods
 from .certificate import CertificateMethods
-from .spam_queues import SpamQueuesMethods
-from .server import ServerMethods
-from .smart_discover import SmartDiscoverMethods
+from .device import DeviceMethods
+from .domain import DomainMethods
 from .license_methods import LicenseMethods
+from .oauth import OauthMethods
+from .rule import RuleMethods
+from .server import ServerMethods
+from .service_statistics import ServiceStatisticsMethods
+from .session_methods import SessionMethods
+from .signup import SignupMethods
+from .smart_discover import SmartDiscoverMethods
+from .spam_queues import SpamQueuesMethods
 
 
 class IceWarpRawAPI:

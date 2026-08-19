@@ -50,16 +50,18 @@ schemas, this module implements a small generic, recursive codec:
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional, Union
 import xml.etree.ElementTree as ET
+from typing import Any, Union
 
 XML_DECLARATION = '<?xml version="1.0" encoding="UTF-8"?>'
 NAMESPACE = "admin:iq:rpc"
 
-JSONLike = Union[Dict[str, Any], List[Any], str, int, float, bool, None]
+JSONLike = Union[dict[str, Any], list[Any], str, int, float, bool, None]
 
 
-def build_request(command_name: str, params: Optional[Dict[str, Any]] = None, *, sid: Optional[str] = None) -> bytes:
+def build_request(
+    command_name: str, params: dict[str, Any] | None = None, *, sid: str | None = None
+) -> bytes:
     """Build the raw XML request body for a single IceWarp API call.
 
     Args:
@@ -91,7 +93,7 @@ def build_request(command_name: str, params: Optional[Dict[str, Any]] = None, *,
     return XML_DECLARATION.encode("utf-8") + body
 
 
-def parse_response(xml_bytes: Union[bytes, str]) -> Dict[str, Any]:
+def parse_response(xml_bytes: bytes | str) -> dict[str, Any]:
     """Parse a raw IceWarp API XML response into a plain nested ``dict``.
 
     Returns:
@@ -111,7 +113,7 @@ def parse_response(xml_bytes: Union[bytes, str]) -> Dict[str, Any]:
     return parsed
 
 
-def _build_children(parent: ET.Element, data: Dict[str, Any]) -> None:
+def _build_children(parent: ET.Element, data: dict[str, Any]) -> None:
     for key, value in data.items():
         if value is None:
             continue
@@ -136,7 +138,7 @@ def _set_value(element: ET.Element, value: Any) -> None:
 
 
 def _element_to_value(element: ET.Element) -> JSONLike:
-    result: Dict[str, Any] = dict(element.attrib)
+    result: dict[str, Any] = dict(element.attrib)
     children = list(element)
 
     if not children:
@@ -147,7 +149,7 @@ def _element_to_value(element: ET.Element) -> JSONLike:
             return result
         return text
 
-    groups: Dict[str, List[ET.Element]] = {}
+    groups: dict[str, list[ET.Element]] = {}
     for child in children:
         groups.setdefault(_local_name(child.tag), []).append(child)
 
@@ -168,4 +170,3 @@ def _local_name(tag: str) -> str:
     element when parsing, which we don't care about here.
     """
     return tag.rsplit("}", 1)[-1] if "}" in tag else tag
-
