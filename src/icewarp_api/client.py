@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 import xml.etree.ElementTree as ET
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import requests
-from typing_extensions import Self
+
+if TYPE_CHECKING:
+    from typing_extensions import Self
 
 from . import xmlcodec
 from .exceptions import (

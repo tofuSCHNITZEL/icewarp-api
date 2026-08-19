@@ -19,10 +19,12 @@ and exposes:
 from __future__ import annotations
 
 from enum import IntEnum
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import requests
-from typing_extensions import Self
+
+if TYPE_CHECKING:
+    from typing_extensions import Self
 
 from .client import DEFAULT_TIMEOUT, IceWarpClient
 from .generated.raw_api import IceWarpRawAPI
