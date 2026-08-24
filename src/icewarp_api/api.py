@@ -263,3 +263,22 @@ class IceWarpAPI:
         return self.get_all_accounts(
             domain=domain, page_size=page_size, account_type=AccountType.GROUP
         )
+
+    def get_all_static_routes(
+        self, *, domain: str | None = None, page_size: int = DEFAULT_PAGE_SIZE
+    ) -> list[dict[str, Any]]:
+        """Fetch every static route on the server, across all domains.
+
+        Same as :meth:`get_all_accounts`, with the server filtering on
+        :attr:`AccountType.STATIC_ROUTE`.
+
+        Args:
+            domain: Only fetch static routes for this domain name.
+            page_size: Number of items requested per page.
+
+        Returns:
+            A list of static route dicts, each with an added ``"domain"`` key.
+        """
+        return self.get_all_accounts(
+            domain=domain, page_size=page_size, account_type=AccountType.STATIC_ROUTE
+        )

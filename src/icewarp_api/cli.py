@@ -531,6 +531,30 @@ def get_all_groups_command(
     _print_result(result)
 
 
+@app.command(name="get-all-static-routes", rich_help_panel=TOOLKIT_PANEL)
+def get_all_static_routes_command(
+    ctx: typer.Context,
+    domain: str | None = typer.Option(
+        None,
+        "--domain",
+        help="Only list static routes in this domain, instead of every domain on the server",
+    ),
+    page_size: int = typer.Option(
+        100,
+        "--page-size",
+        help="Number of accounts requested per page while paginating",
+    ),
+) -> None:
+    """List every static route across all domains (curated helper).
+
+    Like `get-all-accounts`, but asks the server for accounts of type
+    STATIC_ROUTE only.
+    """
+    api = _get_api(ctx)
+    result = api.get_all_static_routes(domain=domain, page_size=page_size)
+    _print_result(result)
+
+
 @app.command(name="call", rich_help_panel=HIGH_LEVEL_PANEL)
 def call_command(
     ctx: typer.Context,

@@ -131,6 +131,20 @@ def test_get_all_groups_sends_typemask(requests_mock):
     assert "<filter><typemask>7</typemask></filter>" in body
 
 
+def test_get_all_static_routes_sends_typemask(requests_mock):
+    requests_mock.post(
+        f"{BASE_URL}/GetAccountsInfoList",
+        text=xml_result("<result><item><email>route1@example.com</email></item></result>"),
+    )
+    api = IceWarpAPI(BASE_URL, sid="sid-123")
+    routes = api.get_all_static_routes(domain="example.com")
+
+    assert [entry["email"] for entry in routes] == ["route1@example.com"]
+    assert routes[0]["domain"] == "example.com"
+    body = requests_mock.request_history[-1].body.decode("utf-8")
+    assert "<filter><typemask>4</typemask></filter>" in body
+
+
 def test_get_all_accounts_omits_filter_by_default(requests_mock):
     requests_mock.post(
         f"{BASE_URL}/GetAccountsInfoList",
